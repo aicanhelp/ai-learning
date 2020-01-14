@@ -125,23 +125,13 @@ _余弦相似度适用于任意数量的维度。这些分数要好得多，因�
 
 ![](https://jalammar.github.io/images/word2vec/king-man+woman-gensim.png)
 
-使用
-
-python中
-
-的
-
-[Gensim](https://radimrehurek.com/gensim/)
-
-库，我们可以添加和减去单词向量，它将找到与所得向量最相似的单词。
-
-该图像显示了最相似的单词的列表，每个单词都有其余弦相似度。
+_使用python中的_[_Gensim_](https://radimrehurek.com/gensim/)_库，我们可以添加和减去单词向量，它将找到与所得向量最相似的单词。该图像显示了最相似的单词的列表，每个单词都有其余弦相似度。_
 
 我们可以像以前一样可视化此类比：
 
 ![](https://jalammar.github.io/images/word2vec/king-analogy-viz.png)
 
-“国王男人+女人”产生的向量不完全等于“女王”，但是“女王”是我们在该集合中拥有的40万个词嵌入中与它最接近的词。
+_“国王男人+女人”产生的向量不完全等于“女王”，但是“女王”是我们在该集合中拥有的40万个词嵌入中与它最接近的词。_
 
 现在，我们已经研究了训练有素的词嵌入，让我们进一步了解训练过程。但是在进入word2vec之前，我们需要看一下词嵌入的概念母体：神经语言模型。
 
@@ -461,47 +451,19 @@ word2vec训练过程中的两个关键超参数是窗口大小和否定样本数
 
 # 参考资料和进一步阅读 {#references--further-readings}
 
-* [单词和短语的分布式表示及其组成](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf)
-  \[pdf\]
-* [向量空间中单词表示的有效估计](https://arxiv.org/pdf/1301.3781.pdf)
-  \[pdf\]
-* [神经概率语言模型](http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf)
-  \[pdf\]
-* Dan Jurafsky和James H. Martin的
-  [语音和语言处理](https://web.stanford.edu/~jurafsky/slp3/)
-  是NLP的主要资源。
-  第2章将介绍Word2vec。
-* [Yoav Goldberg撰写的《](https://twitter.com/yoavgo)
-  [自然语言处理中](https://www.amazon.com/Language-Processing-Synthesis-Lectures-Technologies/dp/1627052984)
-  的
-  [神经网络方法》](https://www.amazon.com/Language-Processing-Synthesis-Lectures-Technologies/dp/1627052984)
-  对于神经NLP主题非常有用。
-* [克里斯·麦考密克（Chris McCormick](http://mccormickml.com/)
-  ）写了一些有关Word2vec的精彩博客文章。
-  他还刚刚发布
-  [了word2vec的内部工作原理](https://www.preview.nearist.ai/paid-ebook-and-tutorial)
-  ，这是一本针对
-  [word2vec内部原理的](https://www.preview.nearist.ai/paid-ebook-and-tutorial)
-  电子书。
+* [单词和短语的分布式表示及其组成](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf)\[pdf\]
+* [向量空间中单词表示的有效估计](https://arxiv.org/pdf/1301.3781.pdf)\[pdf\]
+* [神经概率语言模型](http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf)\[pdf\]
+* Dan Jurafsky和James H. Martin的[语音和语言处理](https://web.stanford.edu/~jurafsky/slp3/)是NLP的主要资源。第2章将介绍Word2vec。
+* [Yoav Goldberg撰写的《](https://twitter.com/yoavgo)[自然语言处理中](https://www.amazon.com/Language-Processing-Synthesis-Lectures-Technologies/dp/1627052984)的[神经网络方法》](https://www.amazon.com/Language-Processing-Synthesis-Lectures-Technologies/dp/1627052984)对于神经NLP主题非常有用。
+* [克里斯·麦考密克（Chris McCormick](http://mccormickml.com/)）写了一些有关Word2vec的精彩博客文章。
+  他还刚刚发布[了word2vec的内部工作原理](https://www.preview.nearist.ai/paid-ebook-and-tutorial)，这是一本针对[word2vec内部原理的](https://www.preview.nearist.ai/paid-ebook-and-tutorial)电子书。
 * 想阅读代码吗？
   这里有两个选择：
-  * Gensim的
-    word2vec
-    的
-    [python实现](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/word2vec.py)
-  * Mikolov
-    [在C中](https://github.com/tmikolov/word2vec/blob/master/word2vec.c)
-    的原始
-    [实现](https://github.com/tmikolov/word2vec/blob/master/word2vec.c)
-    –更好的是，此
-    [版本带有](https://github.com/chrisjmccormick/word2vec_commented/blob/master/word2vec.c)
-    Chris McCormick的
-    [详细注释](https://github.com/chrisjmccormick/word2vec_commented/blob/master/word2vec.c)
-    。
+  * Gensim的word2vec的[python实现](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/word2vec.py)
+  * Mikolov[在C中](https://github.com/tmikolov/word2vec/blob/master/word2vec.c)的原始[实现](https://github.com/tmikolov/word2vec/blob/master/word2vec.c)–更好的是，此[版本带有](https://github.com/chrisjmccormick/word2vec_commented/blob/master/word2vec.c)Chris McCormick的[详细注释](https://github.com/chrisjmccormick/word2vec_commented/blob/master/word2vec.c)。
 * [评估组成语义的分布模型](http://sro.sussex.ac.uk/id/eprint/61062/1/Batchkarov, Miroslav Manov.pdf)
-* [关于词嵌入](http://ruder.io/word-embeddings-1/index.html)
-  ，
-  [第2部分](http://ruder.io/word-embeddings-softmax/)
+* [关于词嵌入](http://ruder.io/word-embeddings-1/index.html)，[第2部分](http://ruder.io/word-embeddings-softmax/)
 * [沙丘](https://www.amazon.com/Dune-Frank-Herbert/dp/0441172717/)
 
 
