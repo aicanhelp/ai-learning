@@ -1594,16 +1594,17 @@ predictions[:5]
 
 现在，我们只要将机率值最大的类别当作答案，并将这个结果转回对应的文本标签即可上传到Kaggle：
 
-```
-index_to_label = { v : k for k , v in label_to_index . items ()}        
+```python
+index_to_label = {v: k for k, v in label_to_index.items()}
 
-test [ 'Category' ] = [ index_to_label [ idx ] for idx in np . argmax ( predictions , axis = 1 )]       
+test['Category'] = [index_to_label[idx] for idx in np.argmax(predictions, axis=1)]
 
 submission = test \
-     . loc [:, [ 'Category' ]] \
-     . reset_index ()   
+    .loc[:, ['Category']] \
+    .reset_index()
 
-submission . columns = [ 'Id' , 'Category' ] submission . head ()   
+submission.columns = ['Id', 'Category']
+submission.head()
 ```
 
 ![img](imgs/submission.jpg)

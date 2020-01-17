@@ -1,7 +1,6 @@
 # 图解的Word2vec
 
-讨论： [Hacker News（347分，37条评论）](https://news.ycombinator.com/item?id=19498356)，[Reddit r / MachineLearning（151分，19条评论）](https://www.reddit.com/r/MachineLearning/comments/b60jtg/p_the_illustrated_word2vec/)
-翻译：[中文（简体）](https://mp.weixin.qq.com/s?__biz=MjM5MTQzNzU2NA==&mid=2651669277&idx=2&sn=bc8f0590f9e340c1f1359982726c5a30&chksm=bd4c648e8a3bed9817f30c5a512e79fe0cc6fbc58544f97c857c30b120e76508fef37cae49bc&scene=0&xtrack=1#rd)，[韩文](https://databreak.netlify.com/2019-04-25-illustrated_word2vec/)，[葡萄牙语](https://pessoalex.wordpress.com/2019/03/29/o-word2vec-ilustrado/)，[俄语](https://habr.com/ru/post/446530/)
+
 
 ![img](imgs/word2vec.png)
 
