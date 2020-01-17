@@ -121,7 +121,7 @@
 
 接着看到资料集（下图）第一列最右边的`label`栏位为`agreed`，代表B同意A的叙述，则我们可以判定B也是假新闻。
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/view-data-on-kaggle.jpg)
+![img](imgs/view-data-on-kaggle.jpg)
 
 这就是一个简单的「假新闻分类问题」：给定一个成对的新闻标题A & B，在已知A 为假新闻的情况下，预测B 跟A 之间的关系。其关系可以分为3 个类别：
 
@@ -772,13 +772,13 @@ X = [ What, time, is, it, ? ]
 
 不同于FFNN，RNN在第一个时间点`t0`并不会直接把整个序列X读入。反之，在第一个时间点`t0`，它只将该序列中的第一个元素`x0`读入中间的细胞A。细胞A则会针对`x0`做些处理以后，更新自己的「状态」并输出第一个结果`h0`。
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/rnn-static.png)
+![img](./imgs/rnn-static.png)
 
 在下个时间点`t1`，RNN如法炮制，读入序列X中的下一个元素`x1`，并利用刚刚处理完`x0`得到的细胞状态，处理`x1`并更新自己的状态（也被称为记忆），接着输出另个结果`h1`。
 
 剩下的`xt`都会被以同样的方式处理。但不管输入的序列X有多长，RNN的本体从头到尾都是等号左边的样子：回圈代表细胞A利用「上」一个时间点（比方说`t1`）储存的状态，来处理当下的输入（比方说`x2`）。
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/rnn-static.png)
+![img](./imgs/rnn-static.png)
 
 但如果你将不同时间点（`t0`、`t1`...）的RNN以及它的输入一起截图，并把所有截图从左到右一字排开的话，就会长得像等号右边的形式。
 
@@ -986,7 +986,9 @@ for i, seq in enumerate(x1_train[:5]):
 
 如果我们能做到这件事情，则RNN 就能用以下的方式读入我们的资料：
 
-![img](imgs/rnn-process-vectors.gif)注意：在每个时间点被塞入RNN的「词汇」不再是1个数字，而是一个N维向量（图中N为3） （[图片来源](https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21)）
+![img](imgs/rnn-process-vectors.gif)
+
+注意：在每个时间点被塞入RNN的「词汇」不再是1个数字，而是一个N维向量（图中N为3） （[图片来源](https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21)）
 
 
 
@@ -1036,7 +1038,9 @@ for i, seq in enumerate(x1_train[:5]):
 
 好消息是，大部分的情况我们并不需要自己手动设定每个词汇的词向量。我们可以随机初始化所有词向量（如前述的随机转换），并利用平常训练神经网路的[反向传播算法（Backpropagation）](https://zh.wikipedia.org/wiki/反向传播算法)，让神经网路自动学到一组适合当前NLP任务的词向量（如上张图的理想状态）。
 
-![img](imgs/backpropagation-example.gif)反向传播让神经网路可以在训练过程中修正参数，持续减少预测错误的可能性（[图片来源](https://www.youtube.com/watch?v=Ilg3gGewQ5U)）
+![img](imgs/backpropagation-example.gif)
+
+反向传播让神经网路可以在训练过程中修正参数，持续减少预测错误的可能性（[图片来源](https://www.youtube.com/watch?v=Ilg3gGewQ5U)）
 
 
 
@@ -1113,7 +1117,9 @@ embedding_layer = layers.Embedding(
 
 序列里头的每个数字（即词汇）都被转换成一个3维的词向量，而相同数字则当然都会对应到同一个词向量（如前3个`0`所对应到的词向量）。
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/rnn-process-vectors.gif)Keras的Embedding Layer让我们可以轻松地将词汇转换成适合神经网路的词向量（[图片来源](https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21)）
+![img](./imgs/rnn-process-vectors.gif)
+
+Keras的Embedding Layer让我们可以轻松地将词汇转换成适合神经网路的词向量（[图片来源](https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21)）
 
 
 
@@ -1171,8 +1177,6 @@ embedding_layer = layers.Embedding(
 
 ![img](imgs/deep-learning-three-steps-with-keras.jpg)用深度学习框架Keras来实作深度学习的基本3步骤（[图片来源](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017_2/Lecture/keras.pdf)）
 
-
-
 1. 定义神经网路的架构
 2. 决定如何衡量模型的表现
 3. 训练模型并挑选最好的结果
@@ -1185,9 +1189,7 @@ embedding_layer = layers.Embedding(
 
 在实作之前，先让我们回顾一下前面段落看到的模型架构：
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/siamese-network.jpg)本文用来实现假新闻分类的神经网路架构
-
-
+![img](./imgs/siamese-network.jpg)本文用来实现假新闻分类的神经网路架构
 
 从左到右扫过一遍，你可以很清楚地发现我们需要以下5 个元素来完成这个模型：
 
@@ -1201,7 +1203,7 @@ embedding_layer = layers.Embedding(
 
 另外值得一提的是，图上的每个层（Layer）以及向量右下的灰字都对应了底下Python 程式码里头的变数名称：
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/siamese-network.jpg)灰字代表程式码里头对应的变数名称
+![img](./imgs/siamese-network.jpg)灰字代表程式码里头对应的变数名称
 
 
 
@@ -1298,7 +1300,7 @@ plot_model(
 
 最重要的是，这个用Keras 定义出来的模型，跟我们之前想像中的孪生神经网路可以说是一模一样：
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/siamese-network.jpg)
+![img](./imgs/siamese-network.jpg)
 
 我没有骗你，对吧？
 
@@ -1511,7 +1513,7 @@ history = model.fit(
 
 这代表模型利用从训练资料集学到的模式（Pattern）还无法非常精准地预测没见过的事物。
 
-![img](https://leemeng.tw/images/nlp-kaggle-intro/deep-learning-three-steps-with-keras.jpg)用Keras 来实作深度学习的基本3 步骤
+![img](./imgs/deep-learning-three-steps-with-keras.jpg)用Keras 来实作深度学习的基本3 步骤
 
 
 

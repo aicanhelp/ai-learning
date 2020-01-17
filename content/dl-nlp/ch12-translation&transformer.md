@@ -64,8 +64,6 @@
 
 ![img](imgs/nlp-intro.jpg)中研院这篇文章清楚地说明了自然语言处理在中文上的研究与应用（图片来源：[研之有物](http://research.sinica.edu.tw/nlp-natural-language-processing-chinese-knowledge-information/)）
 
-
-
 希望这样的要求没把你吓跑，因为事实上你大约需要好几倍的相关知识来成功实作Transformer。[尽管在实作前你会看到一些额外要求](https://leemeng.tw/neural-machine-translation-with-transformer-and-tensorflow2.html#師傅引進門，修行在個人)，本文的前半部分还是相当平易近人的，还请放心阅读。
 
 当你想要深入了解某些细节的时候，可以参考这节附上的连结或是文内说明概念时附上的图片来源。
