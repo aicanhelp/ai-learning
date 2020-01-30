@@ -68,7 +68,7 @@
 
 NMT模型的确切体系结构有所不同。顺序数据的自然选择是大多数NMT模型使用的递归神经网络（RNN）。通常，RNN用于编码器和解码器。但是，RNN模型在以下方面有所不同：（a）*方向性* –单向或双向；（b）*深度* –单层或多层；（c）*类型* -通常是普通RNN，长短期记忆（LSTM）或门控循环单元（GRU）。有兴趣的读者可以在此[博客文章](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)上找到有关RNN和LSTM的更多信息。
 
-在本教程中，我们以单向且使用LSTM作为递归单元的*深层多层RNN*作为示例。我们在图2中显示了这样一个模型的示例。在此示例中，我们构建了一个模型来将源语句“我是学生”翻译成目标语句“ Je suisétudiant”。从较高的角度来看，NMT模型由两个递归神经网络组成：*编码器* RNN仅消耗输入的源单词而没有做出任何预测；的 *解码器*，另一方面，同时预测下一话处理目标句子。
+在本教程中，我们以单向且使用LSTM作为递归单元的*深层多层RNN*作为示例。我们在图2中显示了这样一个模型的示例。在此示例中，我们构建了一个模型来将源语句“我是学生”翻译成目标语句“ Je suisétudiant”。从较高的角度来看，NMT模型由两个递归神经网络组成：*编码器* RNN仅消耗输入的源单词而没有做出任何预测；*解码器*，另一方面，同时预测下一话处理目标句子。
 
 有关更多信息，我们请读者参考[Luong（2016）](https://github.com/lmthang/thesis)。
 
@@ -92,8 +92,8 @@ git clone https://github.com/tensorflow/nmt/
 在底层，编码器和解码器RNN接收以下输入：首先是源语句，然后是边界标记“ <s>”和目标语句，边界标记“ <s>”指示从编码模式到解码模式的转换。为了进行*培训*，我们将为系统提供以下张量，这些张量为时间主要格式，并包含单词索引：
 
 - **encoder_inputs** [max_encoder_time，batch_size]：源输入字。
-- **coder_inputs** [max_decoder_time，batch_size]：目标输入字。
-- **coder_outputs** [max_decoder_time，batch_size]：目标输出字，这些是解码器输入，向左移动了一个时间步，并在右侧附加了一个句子结尾标记。
+- **decoder_inputs** [max_decoder_time，batch_size]：目标输入字。
+- **decoder_outputs** [max_decoder_time，batch_size]：目标输出字，这些是解码器输入，向左移动了一个时间步，并在右侧附加了一个句子结尾标记。
 
 为了提高效率，我们一次训练多个句子（batch_size）。测试略有不同，因此我们将在后面讨论。
 
@@ -101,15 +101,15 @@ git clone https://github.com/tensorflow/nmt/
 
 给定单词的分类性质，该模型必须首先查找源和目标嵌入，以检索相应的单词表示形式。为了使该*嵌入层*起作用，首先为每种语言选择一个词汇表。通常，选择词汇量V，并且仅将最频繁的V字视为唯一。所有其他单词都将转换为“未知”令牌，并且所有单词都具有相同的嵌入。嵌入权重（每种语言一组）通常在训练期间学习。
 
-```
-＃嵌入 
-embedding_encoder = variable_scope.get_variable（
-    “ embedding_encoder ”，[src_vocab_size，embedding_size]， ...）
-＃查一查嵌入：
-＃    encoder_inputs：[MAX_TIME，的batch_size] 
-＃    encoder_emb_inp：[MAX_TIME，batch_size时，embedding_size] 
-encoder_emb_inp = embedding_ops.embedding_lookup （
-    embedding_encoder，encoder_inputs）
+```python
+# Embedding
+embedding_encoder = variable_scope.get_variable(
+    "embedding_encoder", [src_vocab_size, embedding_size], ...)
+# Look up embedding:
+#   encoder_inputs: [max_time, batch_size]
+#   encoder_emb_inp: [max_time, batch_size, embedding_size]
+encoder_emb_inp = embedding_ops.embedding_lookup(
+    embedding_encoder, encoder_inputs)
 ```
 
 同样，我们可以构建*embedding_decoder*和*coder_emb_inp*。请注意，可以选择使用诸如word2vec或Glove向量之类的预训练词表示来初始化嵌入权重。通常，如果有大量训练数据，我们可以从头开始学习这些嵌入。
@@ -118,16 +118,16 @@ encoder_emb_inp = embedding_ops.embedding_lookup （
 
 检索到词嵌入后，会将词嵌入作为输入馈入主网络，该主网络由两个多层RNN组成-源语言的编码器和目标语言的解码器。原则上，这两个RNN可以共享相同的权重；但是，在实践中，我们经常使用两个不同的RNN参数（在拟合大型训练数据集时，此类模型会做得更好）。该 *编码器* RNN使用零个向量为出发状态，是建立如下：
 
-```
-＃生成RNN细胞 
-encoder_cell = tf.nn.rnn_cell.BasicLSTMCell（NUM_UNITS）
+```python
+# Build RNN cell
+encoder_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units)
 
-＃运行动态RNN 
-＃    encoder_outputs：[MAX_TIME，batch_size时，NUM_UNITS] 
-＃    encoder_state：[batch_size时，NUM_UNITS] 
-encoder_outputs，encoder_state = tf.nn.dynamic_rnn（
-    encoder_cell，encoder_emb_inp，
-    sequence_length = source_sequence_length，time_major = True）
+# Run Dynamic RNN
+#   encoder_outputs: [max_time, batch_size, num_units]
+#   encoder_state: [batch_size, num_units]
+encoder_outputs, encoder_state = tf.nn.dynamic_rnn(
+    encoder_cell, encoder_emb_inp,
+    sequence_length=source_sequence_length, time_major=True)
 ```
 
 请注意，句子有不同的长度以避免浪费计算，我们通过*source_sequence_length*告诉 *dynamic_rnn*确切的源句子长度 。由于我们的输入是时间专业的，因此我们设置 *time_major = True*。在这里，我们仅构建一个单层*LSTMcoder_cell*。我们将在后面的部分中描述如何构建多层LSTM，添加辍学以及如何使用注意力。
@@ -136,39 +136,37 @@ encoder_outputs，encoder_state = tf.nn.dynamic_rnn（
 
 该*解码器*还需要能够访问源信息，和一个简单的方法来实现这一目标是与编码器，最后隐藏状态初始化它*encoder_state*。在图2中，我们将源单词“ student”的隐藏状态传递给解码器端。
 
-```
-＃建立RNN信元 
-解码器_cell = tf.nn.rnn_cell.BasicLSTMCell（num_units）
-＃辅助 
-辅助 = tf.contrib.seq2seq.TrainingHelper（
-    encoder_emb_inp，decoder_lengths，time_major = True）
- ＃解码 
-器解码器= tf.contrib.seq2seq.BasicDecoder（
-    解码器单元，助手，编码器状态，
-    output_layer = projection_layer）
- ＃动态解码 
-输出，_ = tf.contrib.seq2seq.dynamic_decode（decoder，...）
-logits =输出.rnn_output
+```python
+# Build RNN cell
+decoder_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units)
+# Helper
+helper = tf.contrib.seq2seq.TrainingHelper(
+    decoder_emb_inp, decoder_lengths, time_major=True)
+# Decoder
+decoder = tf.contrib.seq2seq.BasicDecoder(
+    decoder_cell, helper, encoder_state,
+    output_layer=projection_layer)
+# Dynamic decoding
+outputs, _ = tf.contrib.seq2seq.dynamic_decode(decoder, ...)
+logits = outputs.rnn_output
 ```
 
 这里，该代码的核心部分是*BasicDecoder*对象，*解码器*，其接收*decoder_cell*（类似于encoder_cell），一个*辅助*，和先前 *encoder_state*作为输入。通过分离出解码器和助手，我们可以重用的代码库不同，例如，*TrainingHelper*可以与取代 *GreedyEmbeddingHelper*做贪心解码。在[helper.py中](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/seq2seq/python/ops/helper.py)查看更多 [信息](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/seq2seq/python/ops/helper.py)。
 
 最后，我们没有提到*projection_layer*，它是一个密集矩阵，用于将顶部隐藏状态转换为维V的logit向量。我们在图2的顶部说明了此过程。
 
-```
-projection_layer = layers_core.Dense（
-    tgt_vocab_size，use_bias = False）
+```python
+projection_layer = layers_core.Dense(
+    tgt_vocab_size, use_bias=False)
 ```
 
-#### 失利
+#### 损失
 
 鉴于*logits*以上，我们现在已经准备好来计算我们的培训损失：
 
-```
-交叉= tf.nn.sparse_softmax_cross_entropy_with_logits（
-     标签=解码器输出，logits = logits）
-train_loss =（tf.reduce_sum（crossent * target_weights）/ 
-    batch_size）
+```python
+projection_layer = layers_core.Dense(
+    tgt_vocab_size, use_bias=False)
 ```
 
 在这里，*target_weights*是一个零一矩阵，其大小与*解码器_输出*相同 。它将目标序列长度之外的填充位置屏蔽为0。
@@ -179,21 +177,21 @@ train_loss =（tf.reduce_sum（crossent * target_weights）/
 
 现在，我们定义了NMT模型的正向传递。计算反向传播过程仅需几行代码：
 
-```
-＃计算和裁剪渐变 
-参数 = tf.trainable_variables（）
-渐变= tf.gradients（train_loss，params）
-clipped_gradients，_ = tf.clip_by_global_norm（
-    渐变，max_gradient_norm）
+```python
+# Calculate and clip gradients
+params = tf.trainable_variables()
+gradients = tf.gradients(train_loss, params)
+clipped_gradients, _ = tf.clip_by_global_norm(
+    gradients, max_gradient_norm)
 ```
 
 训练RNN的重要步骤之一是梯度裁剪。在这里，我们遵循全球规范。最大值*max_gradient_norm*通常设置为5或1之类的值。最后一步是选择优化器。Adam优化器是常见的选择。我们还选择学习率。的值*learning_rate* 罐通常是在0.0001至0.001范围内 并且可以设置为随着训练的进行而减少。
 
-```
-＃优化 
-optimizer = tf.train.AdamOptimizer（learning_rate）
-update_step = optimizer.apply_gradients（
-     zip（clipped_gradients，params））
+```python
+# Optimization
+optimizer = tf.train.AdamOptimizer(learning_rate)
+update_step = optimizer.apply_gradients(
+    zip(clipped_gradients, params))
 ```
 
 在我们自己的实验中，我们使用标准的SGD（tf.train.GradientDescentOptimizer）并降低了学习率计划，从而获得了更好的性能。请参阅[基准](https://github.com/tensorflow/nmt#benchmarks)。
@@ -209,21 +207,21 @@ update_step = optimizer.apply_gradients（
 
 运行以下命令以开始训练：
 
-```
-mkdir / tmp / nmt_model
+```bash
+mkdir /tmp/nmt_model
 python -m nmt.nmt \
-    --src = vi --tgt = en \
-    --vocab_prefix = / tmp / nmt_data / vocab \
-    --train_prefix = / tmp / nmt_data / train \
-    --dev_prefix = / tmp / nmt_data / tst2012 \
-    --test_prefix = / tmp / nmt_data / tst2013 \
-    --out_dir = / tmp / nmt_model \
-    --num_train_steps = 12000 \
-    --steps_per_stats = 100 \
-    --num_layers = 2 \
-    --num_units = 128 \
-    --dropout = 0.2 \
-    --metrics =问题
+    --src=vi --tgt=en \
+    --vocab_prefix=/tmp/nmt_data/vocab  \
+    --train_prefix=/tmp/nmt_data/train \
+    --dev_prefix=/tmp/nmt_data/tst2012  \
+    --test_prefix=/tmp/nmt_data/tst2013 \
+    --out_dir=/tmp/nmt_model \
+    --num_train_steps=12000 \
+    --steps_per_stats=100 \
+    --num_layers=2 \
+    --num_units=128 \
+    --dropout=0.2 \
+    --metrics=bleu
 ```
 
 上面的命令训练了一个2层LSTM seq2seq模型，该模型具有128个暗点的隐藏单元和12个历元的嵌入。我们使用落差值为0.2（保持概率为0.8）。如果没有错误，我们将在训练时看到与以下类似的日志，且其困惑度值不断降低。
@@ -248,7 +246,7 @@ python -m nmt.nmt \
 我们可以在训练期间启动Tensorboard来查看模型的摘要：
 
 ```
-张量板-端口22222 --logdir / tmp / nmt_model /
+tensorboard --port 22222 --logdir /tmp/nmt_model/
 ```
 
 只需更改以下内容，就可以训练英语和越南语的反方向：
@@ -270,40 +268,40 @@ python -m nmt.nmt \
 
 步骤3使推理与训练有所不同。推理不总是使用正确的目标词作为输入，而是使用模型预测的词。这是实现贪婪解码的代码。它与训练解码器非常相似。
 
-```
-＃辅助 
-辅助 = tf.contrib.seq2seq.GreedyEmbeddingHelper（
-    embedding_decoder，
-    tf.fill（[batch_size]，tgt_sos_id），tgt_eos_id）
+```python
+# Helper
+helper = tf.contrib.seq2seq.GreedyEmbeddingHelper(
+    embedding_decoder,
+    tf.fill([batch_size], tgt_sos_id), tgt_eos_id)
 
-＃解码 
-器解码器 = tf.contrib.seq2seq.BasicDecoder（
-    解码器单元，助手，编码器状态，
-    output_layer = projection_layer）
- ＃动态解码 
-输出，_ = tf.contrib.seq2seq.dynamic_decode（
-    解码器，maximum_iterations = maximum_iterations）
-翻译= outputs.sample_id
+# Decoder
+decoder = tf.contrib.seq2seq.BasicDecoder(
+    decoder_cell, helper, encoder_state,
+    output_layer=projection_layer)
+# Dynamic decoding
+outputs, _ = tf.contrib.seq2seq.dynamic_decode(
+    decoder, maximum_iterations=maximum_iterations)
+translations = outputs.sample_id
 ```
 
 在这里，我们使用*GreedyEmbeddingHelper*而不是*TrainingHelper*。由于我们事先不知道目标序列的长度，因此我们使用*maximum_iterations*限制翻译长度。一种试探法是将源语句长度最多解码两倍。
 
-```
-maximum_iterations = tf.round（tf.reduce_max（source_sequence_length）*  2）
+```python
+maximum_iterations = tf.round(tf.reduce_max(source_sequence_length) * 2)
 ```
 
 训练好模型后，我们现在可以创建一个推理文件并翻译一些句子：
 
-```
-猫> /tmp/my_infer_file.vi
- ＃（复制和粘贴从/tmp/nmt_data/tst2013.vi一些句子）
+```bash
+cat > /tmp/my_infer_file.vi
+# (copy and paste some sentences from /tmp/nmt_data/tst2013.vi)
 
 python -m nmt.nmt \
-    --out_dir = / tmp / nmt_model \
-    --inference_input_file = / tmp / my_infer_file.vi \
-    --inference_output_file = / tmp / nmt_model / output_infer
+    --out_dir=/tmp/nmt_model \
+    --inference_input_file=/tmp/my_infer_file.vi \
+    --inference_output_file=/tmp/nmt_model/output_infer
 
-cat / tmp / nmt_model / output_infer ＃查看作为输出的推断
+cat /tmp/nmt_model/output_infer # To view the inference as output
 ```
 
 注意，只要存在训练检查点，也可以在仍在训练模型的同时运行以上命令。有关更多详细信息，请参见[**inference.py**](https://github.com/tensorflow/nmt/blob/master/nmt/inference.py)。
@@ -351,24 +349,24 @@ cat / tmp / nmt_model / output_infer ＃查看作为输出的推断
 
 首先，我们需要定义一种注意机制，例如（Luong等，2015）：
 
-```
-＃ attention_states：[batch_size时，MAX_TIME，NUM_UNITS] 
-attention_states = tf.transpose（encoder_outputs，[ 1， 0， 2 ]）
+```python
+# attention_states: [batch_size, max_time, num_units]
+attention_states = tf.transpose(encoder_outputs, [1, 0, 2])
 
-＃创建注意机制 
-attention_mechanism = tf.contrib.seq2seq.LuongAttention（
-    num_units，attention_states，
-    memory_sequence_length = source_sequence_length）
+# Create an attention mechanism
+attention_mechanism = tf.contrib.seq2seq.LuongAttention(
+    num_units, attention_states,
+    memory_sequence_length=source_sequence_length)
 ```
 
 在上一个“ [编码器”](https://github.com/tensorflow/nmt#encoder)部分中，*encoder_outputs*是顶层所有源隐藏状态的集合，其形状为*[max_time，batch_size，num_units]*（因为我们使用*dynamic_rnn*并将*time_major*设置为 *True*以提高效率）。对于注意力机制，我们需要确保传入的“内存”是批处理主要的，因此我们需要转置 *tention_states*。我们将*source_sequence_length*传递给注意力机制，以确保正确地对注意力权重进行了归一化处理（仅在非填充位置上）。
 
 定义了注意力机制后，我们使用*AttentionWrapper*包装解码单元：
 
-```
-coder_cell = tf.contrib.seq2seq.AttentionWrapper（
-    解码器单元，注意机制，
-    attention_layer_size = NUM_UNITS）
+```python
+decoder_cell = tf.contrib.seq2seq.AttentionWrapper(
+    decoder_cell, attention_mechanism,
+    attention_layer_size=num_units)
 ```
 
 其余代码与“部分[解码器”](https://github.com/tensorflow/nmt#decoder)中的代码几乎相同！
@@ -380,31 +378,31 @@ coder_cell = tf.contrib.seq2seq.AttentionWrapper（
 运行以下命令以开始训练：
 
 ```
-mkdir / tmp / nmt_attention_model
+mkdir /tmp/nmt_attention_model
 
 python -m nmt.nmt \
-    --attention = scaled_luong \
-    --src = vi --tgt = en \
-    --vocab_prefix = / tmp / nmt_data / vocab \
-    --train_prefix = / tmp / nmt_data / train \
-    --dev_prefix = / tmp / nmt_data / tst2012 \
-    --test_prefix = / tmp / nmt_data / tst2013 \
-    --out_dir = / tmp / nmt_attention_model \
-    --num_train_steps = 12000 \
-    --steps_per_stats = 100 \
-    --num_layers = 2 \
-    --num_units = 128 \
-    --dropout = 0.2 \
-    --metrics =问题
+    --attention=scaled_luong \
+    --src=vi --tgt=en \
+    --vocab_prefix=/tmp/nmt_data/vocab  \
+    --train_prefix=/tmp/nmt_data/train \
+    --dev_prefix=/tmp/nmt_data/tst2012  \
+    --test_prefix=/tmp/nmt_data/tst2013 \
+    --out_dir=/tmp/nmt_attention_model \
+    --num_train_steps=12000 \
+    --steps_per_stats=100 \
+    --num_layers=2 \
+    --num_units=128 \
+    --dropout=0.2 \
+    --metrics=bleu
 ```
 
 训练后，我们可以对新的out_dir使用相同的推理命令进行推理：
 
 ```
 python -m nmt.nmt \
-    --out_dir = / tmp / nmt_attention_model \
-    --inference_input_file = / tmp / my_infer_file.vi \
-    --inference_output_file = / tmp / nmt_attention_model / output_infer
+    --out_dir=/tmp/nmt_attention_model \
+    --inference_input_file=/tmp/my_infer_file.vi \
+    --inference_output_file=/tmp/nmt_attention_model/output_infer
 ```
 
 ## 提示与技巧
@@ -438,83 +436,83 @@ python -m nmt.nmt \
 
 **之前：单个图中的三个模型并共享一个会话**
 
-```
-使用 tf.variable_scope（' root '）：
-  train_inputs = tf.placeholder（）
-  train_op，损失= BuildTrainModel（train_inputs）
-  初始值设定项= tf.global_variables_initializer（）
+```python
+with tf.variable_scope('root'):
+  train_inputs = tf.placeholder()
+  train_op, loss = BuildTrainModel(train_inputs)
+  initializer = tf.global_variables_initializer()
 
-与 tf.variable_scope（' root '，复用= True）：
-  eval_inputs = tf.placeholder（）
-  eval_loss = BuildEvalModel（eval_inputs）
+with tf.variable_scope('root', reuse=True):
+  eval_inputs = tf.placeholder()
+  eval_loss = BuildEvalModel(eval_inputs)
 
-与 tf.variable_scope（' root '，复用= True）：
-  infer_inputs = tf.placeholder（）
-  inference_output = BuildInferenceModel（infer_inputs）
+with tf.variable_scope('root', reuse=True):
+  infer_inputs = tf.placeholder()
+  inference_output = BuildInferenceModel(infer_inputs)
 
-sess = tf.Session（）
+sess = tf.Session()
 
-sess.run（初始化器）
+sess.run(initializer)
 
-对于我在 itertools.count（）中：
-  train_input_data =  ... 
-  sess.run（[loss，train_op]，feed_dict = {train_inputs：train_input_data}）
+for i in itertools.count():
+  train_input_data = ...
+  sess.run([loss, train_op], feed_dict={train_inputs: train_input_data})
 
-  如果我％ EVAL_STEPS  ==  0：
-     而 data_to_eval：
-      eval_input_data =  ... 
-      sess.run（[eval_loss]，feed_dict = {eval_inputs：eval_input_data}）
+  if i % EVAL_STEPS == 0:
+    while data_to_eval:
+      eval_input_data = ...
+      sess.run([eval_loss], feed_dict={eval_inputs: eval_input_data})
 
-  如果我％ INFER_STEPS  ==  0：
-    sess.run（inference_output，feed_dict = {infer_inputs：infer_input_data}）
+  if i % INFER_STEPS == 0:
+    sess.run(inference_output, feed_dict={infer_inputs: infer_input_data})
 ```
 
 **之后：三个图形中的三个模型，三个会话共享相同的变量**
 
-```
-train_graph = tf.Graph（）
-eval_graph = tf.Graph（）
-infer_graph = tf.Graph（）
+```python
+train_graph = tf.Graph()
+eval_graph = tf.Graph()
+infer_graph = tf.Graph()
 
-与 train_graph.as_default（）：
-  train_iterator =  ... 
-  train_model = BuildTrainModel（train_iterator）
-  初始值设定项= tf.global_variables_initializer（）
+with train_graph.as_default():
+  train_iterator = ...
+  train_model = BuildTrainModel(train_iterator)
+  initializer = tf.global_variables_initializer()
 
-使用 eval_graph.as_default（）：
-  eval_iterator =  ... 
-  eval_model = BuildEvalModel（eval_iterator）
+with eval_graph.as_default():
+  eval_iterator = ...
+  eval_model = BuildEvalModel(eval_iterator)
 
-使用 infer_graph.as_default（）：
-  infer_iterator，infer_inputs =  ... 
-  infer_model = BuildInferenceModel（infer_iterator）
+with infer_graph.as_default():
+  infer_iterator, infer_inputs = ...
+  infer_model = BuildInferenceModel(infer_iterator)
 
-checkpoints_path =  “ / tmp / model / checkpoints ”
+checkpoints_path = "/tmp/model/checkpoints"
 
-train_sess = tf.Session（图= train_graph ）
-eval_sess = tf.Session（graph = eval_graph）
-infer_sess = tf.Session（graph = infer_graph）
+train_sess = tf.Session(graph=train_graph)
+eval_sess = tf.Session(graph=eval_graph)
+infer_sess = tf.Session(graph=infer_graph)
 
-train_sess.run（初始化）
-train_sess.run（train_iterator.initializer）
+train_sess.run(initializer)
+train_sess.run(train_iterator.initializer)
 
-对于我在 itertools.count（）中：
+for i in itertools.count():
 
-  train_model.train（火车_sess）
+  train_model.train(train_sess)
 
-  如果我％ EVAL_STEPS  ==  0：
-    checkpoint_path = train_model.saver.save（train_sess，checkpoints_path，global_step = i）
-    eval_model.saver.restore（eval_sess，checkpoint_path）
-    eval_sess.run（eval_iterator.initializer）
-    而 data_to_eval时：
-      eval_model.eval（eval_sess）
+  if i % EVAL_STEPS == 0:
+    checkpoint_path = train_model.saver.save(train_sess, checkpoints_path, global_step=i)
+    eval_model.saver.restore(eval_sess, checkpoint_path)
+    eval_sess.run(eval_iterator.initializer)
+    while data_to_eval:
+      eval_model.eval(eval_sess)
 
-  如果我％ INFER_STEPS  ==  0：
-    checkpoint_path = train_model.saver.save（train_sess，checkpoints_path，global_step = i）
-    infer_model.saver.restore（infer_sess，检查点路径）
-    infer_sess.run（infer_iterator.initializer，feed_dict = {infer_inputs：infer_input_data}）
-     而 data_to_infer：
-      infer_model.infer（infer_sess）
+  if i % INFER_STEPS == 0:
+    checkpoint_path = train_model.saver.save(train_sess, checkpoints_path, global_step=i)
+    infer_model.saver.restore(infer_sess, checkpoint_path)
+    infer_sess.run(infer_iterator.initializer, feed_dict={infer_inputs: infer_input_data})
+    while data_to_infer:
+      infer_model.infer(infer_sess)
 ```
 
 请注意，后一种方法如何“准备好”转换为分布式版本。
@@ -535,59 +533,59 @@ train_sess.run（train_iterator.initializer）
 
 甲**数据集**可以从一批数据张量，一个文件名，或包含多个文件名一个张量来创建。一些例子：
 
-```
-＃训练数据集包含多个文件。
-train_dataset = tf.data.TextLineDataset（train_files）
+```python
+# Training dataset consists of multiple files.
+train_dataset = tf.data.TextLineDataset(train_files)
 
-＃评估数据集使用单个文件，但我们可能
-＃在每个评估回合中都指向一个不同的文件。
-eval_file = tf.placeholder（tf.string， shape =（））
-eval_dataset = tf.data.TextLineDataset（eval_file）
+# Evaluation dataset uses a single file, but we may
+# point to a different file for each evaluation round.
+eval_file = tf.placeholder(tf.string, shape=())
+eval_dataset = tf.data.TextLineDataset(eval_file)
 
-＃为了进行推断，直接通过feed_dict将输入数据输入数据集。
-infer_batch = tf.placeholder（tf.string， shape =（num_infer_examples，））
-infer_dataset = tf.data.Dataset.from_tensor_slices（infer_batch）
+# For inference, feed input data to the dataset directly via feed_dict.
+infer_batch = tf.placeholder(tf.string, shape=(num_infer_examples,))
+infer_dataset = tf.data.Dataset.from_tensor_slices(infer_batch)
 ```
 
 可以通过输入处理对所有数据集进行类似处理。这包括读取和清除数据，存储（在训练和评估的情况下），筛选和批处理。
 
 例如，要将每个句子转换为单词字符串的向量，我们使用数据集映射转换：
 
-```
-数据集= dataset.map（lambda  字符串：tf.string_split（[string]）。values）
+```python
+dataset = dataset.map(lambda string: tf.string_split([string]).values)
 ```
 
 然后，我们可以将每个句子向量切换为包含向量及其动态长度的元组：
 
-```
-数据集= dataset.map（lambda  单词：（单词，tf.size（单词））
+```python
+dataset = dataset.map(lambda words: (words, tf.size(words))
 ```
 
 最后，我们可以对每个句子进行词汇查询。给定一个查找表对象表，此映射将第一个元组元素从字符串向量转换为整数向量。
 
-```
-数据集= dataset.map（λ  字，大小：（table.lookup（words），大小））
+```python
+dataset = dataset.map(lambda words, size: (table.lookup(words), size))
 ```
 
 连接两个数据集也很容易。如果两个文件包含彼此的逐行翻译，并且每个文件都被读入其自己的数据集，则可以通过以下方式创建一个新的数据集，其中包含压缩行的元组：
 
-```
-source_target_dataset = tf.data.Dataset.zip（（source_dataset，target_dataset））
+```python
+source_target_dataset = tf.data.Dataset.zip((source_dataset, target_dataset))
 ```
 
 可变长度句子的批处理很简单。以下转换对*source_target_dataset中的**batch_size*元素进行批处理，并将源和目标向量分别*填充*为每个批次中最长的源和目标向量的长度。
 
-```
-batched_dataset = source_target_dataset.padded_batch（
-        batch_size，
-        padded_shapes =（（（tf.TensorShape（[ None ]），   ＃未知大小的源向量 
-                        tf.TensorShape（[]）），      ＃ size（source） 
-                       （tf.TensorShape（[ None ]），   ＃未知大小的目标向量 
-                        tf .TensorShape（[]））），     ＃ size（target）
-        padding_values =（（src_eos_id，   ＃在右侧填充了src_eos_id 
-                         0的源向量），           ＃ size（source）-未使用 
-                        （tgt_eos_id，   ＃使用tgt_eos_id 
-                         0 右边填充的目标向量）））          ＃ size（target）-未使用
+```python
+batched_dataset = source_target_dataset.padded_batch(
+        batch_size,
+        padded_shapes=((tf.TensorShape([None]),  # source vectors of unknown size
+                        tf.TensorShape([])),     # size(source)
+                       (tf.TensorShape([None]),  # target vectors of unknown size
+                        tf.TensorShape([]))),    # size(target)
+        padding_values=((src_eos_id,  # source vectors padded on the right with src_eos_id
+                         0),          # size(source) -- unused
+                        (tgt_eos_id,  # target vectors padded on the right with tgt_eos_id
+                         0)))         # size(target) -- unused
 ```
 
 从此数据集发出的值将是嵌套元组，其张量的最左维度为*batch_size*。结构将是：
@@ -601,13 +599,13 @@ batched_dataset = source_target_dataset.padded_batch（
 
 从数据集读取数据需要三行代码：创建迭代器，获取其值并对其进行初始化。
 
-```
-batched_iterator = batched_dataset.make_initializable_iterator（）
+```python
+batched_iterator = batched_dataset.make_initializable_iterator()
 
-（（源，源长度），（目标，目标长度））= batched_iterator.get_next（）
+((source, source_lengths), (target, target_lengths)) = batched_iterator.get_next()
 
-＃在初始化时。
-session.run（batched_iterator.initializer， feed_dict = { ... }）
+# At initialization time.
+session.run(batched_iterator.initializer, feed_dict={...})
 ```
 
 初始化迭代器后，访问源或目标张量的每个*session.run*调用都将从基础数据集中请求下一个小批量。
@@ -618,15 +616,15 @@ session.run（batched_iterator.initializer， feed_dict = { ... }）
 
 编码器端的双向性通常会提供更好的性能（随着使用更多层，速度会有所下降）。在这里，我们给出一个简化的示例，说明如何构建具有单个双向层的编码器：
 
-```
-＃构造正向和反向单元格 
-forward_cell = tf.nn.rnn_cell.BasicLSTMCell（num_units）
-向后单元格= tf.nn.rnn_cell.BasicLSTMCell（num_units）
+```python
+# Construct forward and backward cells
+forward_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units)
+backward_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units)
 
-bi_outputs，编码器状态= tf.nn.bidirectional_dynamic_rnn（
-    forward_cell，backward_cell，encoder_emb_inp，
-    sequence_length = source_sequence_length，time_major = True）
-encoder_outputs = tf.concat（bi_outputs，- 1）
+bi_outputs, encoder_state = tf.nn.bidirectional_dynamic_rnn(
+    forward_cell, backward_cell, encoder_emb_inp,
+    sequence_length=source_sequence_length, time_major=True)
+encoder_outputs = tf.concat(bi_outputs, -1)
 ```
 
 变量*encoder_outputs*和*encoder_state*可以以相同的方式使用，如第编码器。请注意，对于多个双向层，我们需要稍微操纵编码器状态，有关更多详细信息，请参见[model.py](https://github.com/tensorflow/nmt/blob/master/nmt/model.py)，方法 *_build_bidirectional_rnn（）*。
@@ -635,34 +633,34 @@ encoder_outputs = tf.concat（bi_outputs，- 1）
 
 贪婪解码可以为我们提供相当合理的翻译质量，而波束搜索解码器可以进一步提高性能。波束搜索的想法是通过在翻译时保留少量的顶级候选词，从而更好地探索所有可能翻译的搜索空间。光束的大小称为 *光束宽度* ; 通常，例如尺寸为10的最小光束宽度就足够了。有关更多信息，请向读者介绍[Neubig（2017）的](https://arxiv.org/abs/1703.01619) 7.2.3节。这是一个如何完成波束搜索的示例：
 
-```
-＃复制编码器信息beam_width乘以 
-decoder_initial_state = tf.contrib.seq2seq.tile_batch（
-    encoder_state，乘数= hparams.beam_width）
+```python
+# Replicate encoder infos beam_width times
+decoder_initial_state = tf.contrib.seq2seq.tile_batch(
+    encoder_state, multiplier=hparams.beam_width)
 
-＃定义波束搜索译码器 
-解码器 = tf.contrib.seq2seq.BeamSearchDecoder（
-        细胞= decoder_cell，
-        嵌入= embedding_decoder，
-         start_tokens = start_tokens，
-         end_token = end_token，
-         initial_state = decoder_initial_state，
-         beam_width = beam_width，
-         output_layer = projection_layer，
-         length_penalty_weight = 0.0，
-         coverage_penalty_weight = 0.0）
+# Define a beam-search decoder
+decoder = tf.contrib.seq2seq.BeamSearchDecoder(
+        cell=decoder_cell,
+        embedding=embedding_decoder,
+        start_tokens=start_tokens,
+        end_token=end_token,
+        initial_state=decoder_initial_state,
+        beam_width=beam_width,
+        output_layer=projection_layer,
+        length_penalty_weight=0.0,
+        coverage_penalty_weight=0.0)
 
-＃动态解码 
-输出，_ = tf.contrib.seq2seq.dynamic_decode（decoder， ...）
+# Dynamic decoding
+outputs, _ = tf.contrib.seq2seq.dynamic_decode(decoder, ...)
 ```
 
 请注意，使用了相同的*dynamic_decode（）* API调用，类似于Section [Decoder](https://github.com/tensorflow/nmt#decoder)。解码后，我们可以按以下方式访问翻译：
 
-```
+```python
 translations = outputs.predicted_ids
- ＃
-如果 self .time_major ，请确保翻译形状为[batch_size，beam_width，time]：
-   翻译= tf.transpose（翻译，烫发= [ 1，2，0 ]）
+# Make sure translations shape is [batch_size, beam_width, time]
+if self.time_major:
+   translations = tf.transpose(translations, perm=[1, 2, 0])
 ```
 
 有关更多详细信息，请参见[model.py](https://github.com/tensorflow/nmt/blob/master/nmt/model.py)，方法*_build_decoder（）*。
@@ -679,13 +677,13 @@ translations = outputs.predicted_ids
 
 训练NMT模型可能需要几天的时间。在不同的GPU上放置不同的RNN层可以提高训练速度。这是在多个GPU上创建RNN层的示例。
 
-```
-细胞= []
- 为我在 范围（num_layers）：
-  cells.append（tf.contrib.rnn.DeviceWrapper（
-      tf.contrib.rnn.LSTMCell（num_units），
-      “ / gpu：％d ” ％（num_layers％ num_gpus）））
-cell = tf.contrib.rnn.MultiRNNCell（cells）
+```python
+cells = []
+for i in range(num_layers):
+  cells.append(tf.contrib.rnn.DeviceWrapper(
+      tf.contrib.rnn.LSTMCell(num_units),
+      "/gpu:%d" % (num_layers % num_gpus)))
+cell = tf.contrib.rnn.MultiRNNCell(cells)
 ```
 
 此外，我们需要启用中的`colocate_gradients_with_ops`选项 `tf.gradients`以并行化梯度计算。
@@ -694,19 +692,19 @@ cell = tf.contrib.rnn.MultiRNNCell（cells）
 
 所述[GNMT关注架构](https://arxiv.org/pdf/1609.08144.pdf) 通过使用底（第一）层的输出到查询注意并行化解码器的计算。因此，每个解码步骤都可以在其上一步的第一层和注意力计算完成后立即开始。我们在[tf.contrib.rnn.MultiRNNCell](https://github.com/tensorflow/nmt/blob/master/nmt/gnmt_model.py)的子类*GNMTAttentionMultiCell中*实现了该体系结构 。这是一个如何使用*GNMTAttentionMultiCell*创建解码器单元的*示例*。
 
-```
-细胞= []
- 为我在 范围（num_layers）：
-  cells.append（tf.contrib.rnn.DeviceWrapper（
-      tf.contrib.rnn.LSTMCell（num_units），
-      “ / gpu：％d ” ％（num_layers％ num_gpus）））
-注意_细胞= cells.pop（0）
-注意_细胞= tf.contrib.seq2seq.AttentionWrapper（
-    注意_单元格
-    注意机制，
-    tention_layer_size = None，   ＃不添加额外的密集层。
-    output_attention = False，）
-单元格= GNMTAttentionMultiCell（attention_cell，单元格）
+```python
+cells = []
+for i in range(num_layers):
+  cells.append(tf.contrib.rnn.DeviceWrapper(
+      tf.contrib.rnn.LSTMCell(num_units),
+      "/gpu:%d" % (num_layers % num_gpus)))
+attention_cell = cells.pop(0)
+attention_cell = tf.contrib.seq2seq.AttentionWrapper(
+    attention_cell,
+    attention_mechanism,
+    attention_layer_size=None,  # don't add an additional dense layer.
+    output_attention=False,)
+cell = GNMTAttentionMultiCell(attention_cell, cells)
 ```
 
 ## 基准测试
@@ -791,7 +789,7 @@ nmt/scripts/wmt16_en_de.sh /tmp/wmt16
 
 这是一个示例命令，用于加载经过预训练的GNMT WMT德语-英语检查点进行推断。
 
-```
+```bash
 python -m nmt.nmt \
     --src=de --tgt=en \
     --ckpt=/path/to/checkpoint/translate.ckpt \
@@ -805,7 +803,7 @@ python -m nmt.nmt \
 
 这是训练GNMT WMT德语-英语模型的示例命令。
 
-```
+```bash
 python -m nmt.nmt \
     --src=de --tgt=en \
     --hparams_path=nmt/standard_hparams/wmt16_gnmt_4_layer.json \

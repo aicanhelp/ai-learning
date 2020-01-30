@@ -1,3 +1,6 @@
 [submodule "resources/ml_bert"]
 	path = resources/ml_bert
 	url = https://github.com/aespresso/a_journey_into_math_of_ml.git
+[submodule "resources/nmt"]
+	path = resources/nmt
+	url = https://github.com/tensorflow/nmt.git
