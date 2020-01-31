@@ -165,8 +165,10 @@ projection_layer = layers_core.Dense(
 鉴于*logits*以上，我们现在已经准备好来计算我们的培训损失：
 
 ```python
-projection_layer = layers_core.Dense(
-    tgt_vocab_size, use_bias=False)
+crossent = tf.nn.sparse_softmax_cross_entropy_with_logits(
+    labels=decoder_outputs, logits=logits)
+train_loss = (tf.reduce_sum(crossent * target_weights) /
+    batch_size)
 ```
 
 在这里，*target_weights*是一个零一矩阵，其大小与*解码器_输出*相同 。它将目标序列长度之外的填充位置屏蔽为0。

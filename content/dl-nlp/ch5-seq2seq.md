@@ -11,7 +11,6 @@
 序列到序列模型是一种采用一系列项目（单词，字母，图像特征等）并输出另一个项目序列的模型。经过训练的模型将像这样工作：
 
 <video src="./imgs/seq2seq_1.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 在神经机器翻译中，序列是一系列单词，一个接一个地处理。输出同样是一系列单词：
 
 <video src="./imgs/seq2seq_2.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
@@ -22,13 +21,14 @@
 的编码器处理在输入序列中的每个项目，它编译它捕捉到一个载体中的信息（称为上下文）。处理完整个输入序列后，编码器将上下文发送 给解码器，解码器开始逐项生成输出序列。
 
 <video src="./imgs/seq2seq_3.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 在机器翻译的情况下也是如此。
 
 <video src="./imgs/seq2seq_4.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
 所述上下文 是在机器翻译的情况下的矢量（数字的阵列，基本上）。该编码器和解码器 往往都反复发作的神经网络（一定要看看路易斯·塞拉诺的[一个友好的介绍递归神经网络](https://www.youtube.com/watch?v=UNmqTiOnRfg)的前奏，以RNNs）。
 
-![img](imgs/context.png) 所述上下文 是浮筒的向量。在本文的稍后部分，我们将通过将明亮的颜色分配给具有较高值的单元格来使颜色可视化。
+![img](imgs/context.png)
+
+ 所述上下文 是浮筒的向量。在本文的稍后部分，我们将通过将明亮的颜色分配给具有较高值的单元格来使颜色可视化。
 
 设置 模型时，可以设置上下文向量的大小。它基本上是编码器 RNN 中隐藏单元的数量。这些可视化显示了一个大小为4的向量，但在现实世界中，上下文向量的大小将为256、512或1024。
 
@@ -43,7 +43,6 @@
 现在我们已经介绍了主要的向量/张量，让我们回顾一下RNN的机制并建立一种可视语言来描述这些模型：
 
 <video src="./imgs/seq2seq_5.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 RNN的下一个步骤采用第二个输入矢量和隐藏状态＃1创建该时间步骤的输出。在文章的后面，我们将使用这样的动画来描述神经机器翻译模型中的向量。
 
 
@@ -53,13 +52,11 @@ RNN的下一个步骤采用第二个输入矢量和隐藏状态＃1创建该时�
 让我们来看看隐藏状态 的编码器。注意最后一个隐藏状态 实际上是 我们传递给解码器的上下文。
 
 <video src="./imgs/seq2seq_6.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 该解码器 也维护一个隐藏的状态 ，它从一个时间步骤到下一个通行证。我们只是没有在图形中可视化它，因为我们目前正在关注模型的主要部分。
 
 现在让我们看看另一种可视化序列到序列模型的方法。此动画将使您更容易理解描述这些模型的静态图形。这称为“展开”视图，在这里我们没有显示一个解码器，而是为每个时间步骤显示了一个副本。这样，我们可以查看每个时间步骤的输入和输出。
 
 <video src="./imgs/seq2seq_7.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 ## 让我们现在注意
 
 该背景 矢量原来是为这几种模式的瓶颈。这使得模型处理长句子变得颇具挑战性。[Bahdanau等人（2014年）](https://arxiv.org/abs/1409.0473)和[Luong等人（2015年](https://arxiv.org/abs/1508.04025)）提出了一种解决方案。这些论文介绍并完善了一种称为“注意”的技术，该技术极大地提高了机器翻译系统的质量。注意使模型可以根据需要集中于输入序列的相关部分。
@@ -75,7 +72,6 @@ RNN的下一个步骤采用第二个输入矢量和隐藏状态＃1创建该时�
 首先，编码器将更多数据传递给解码器。相反，通过编码阶段的最后一个隐藏的状态时，编码器通过*所有*的隐藏状态 的解码器：
 
 <video src="./imgs/seq2seq_8.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 其次，注意解码器 在产生其输出之前要执行额外的步骤。为了专注于与该解码时间步骤有关的输入部分，解码器 执行以下操作：
 
 1. 查看 它接收到的一组编码器隐藏状态 –每个编码器隐藏状态 与输入句子中的某个单词最相关
@@ -83,7 +79,6 @@ RNN的下一个步骤采用第二个输入矢量和隐藏状态＃1创建该时�
 3. 将每个隐藏状态 乘以其softmaxed分数，从而放大 具有高分数的隐藏状态，并淹没 具有低分数的隐藏状态
 
 <video src="./imgs/seq2seq_9.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 
 
 计分练习是在解码器端的每个时间步完成的。
@@ -99,7 +94,6 @@ RNN的下一个步骤采用第二个输入矢量和隐藏状态＃1创建该时�
 7. 重复下一个步骤
 
 <video src="./imgs/seq2seq_10.mp4" width="100%" height="auto" loop="" autoplay="" controls="" style="box-sizing: border-box; display: inline-block; vertical-align: baseline; margin: 0px; padding: 0px; border: 0px; font: inherit;"></video>
-
 
 
 这是查看在每个解码步骤中我们要注意的输入句子的哪一部分的另一种方式：
