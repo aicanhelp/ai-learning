@@ -4,7 +4,6 @@
 这是圣经中著名的[巴别塔](https://zh.wikipedia.org/wiki/巴別塔)桥段，用来解释为何当今世上有那么多种语言。当年的上帝或许过于杞人忧天，但近年多亏了[深度学习](https://zh.wikipedia.org/zh-hant/深度学习)，[机器翻译](https://zh.wikipedia.org/wiki/机器翻译)的快速发展让人不禁觉得，或许巴别塔很快就不再只是虚幻传说了。
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/google-translate.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 以往被视为非常困难的中-> 英翻译如今在深度学习的加持下也有不错的水准
 
 
@@ -122,7 +121,6 @@ RNN很适合拿来处理具有时间顺序的序列数据（下方的词在丢�
 而在深度学习时代，我们一般会使用以RNN为基础的[Encoder-Decoder架构（又被称作Sequence to Sequence / Seq2Seq模型）](https://youtu.be/ZjfjPzXw6og?t=3208)来做序列生成：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/seq2seq-animate.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 一个以RNN为基础的Encoder-Decoder / Seq2Seq模型将法文翻译成英文的步骤（[图片来源](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/)）
 
 
@@ -161,7 +159,6 @@ Seq2Seq模型里头Encoder跟Decoder是各自独立的RNN。Encoder把输入的�
 而如果我们将这些句子做[t-SNE](https://distill.pub/2016/misread-tsne/)，甚至可以得到这样的结果：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/gnmt-multilingual.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 在Seq2Seq模型创造出来的「语义」空间里头，不同语言但同语义的句子彼此相当接近（[图片来源](https://projector.tensorflow.org/)）
 
 
@@ -186,7 +183,6 @@ Seq2Seq模型里头Encoder跟Decoder是各自独立的RNN。Encoder把输入的�
 另外值得注意的是，机器翻译本身是一种[有条件的序列生成任务（Conditional Sequence Generation）](https://youtu.be/ZjfjPzXw6og?t=2816)：给定一个特定的输入句子（文字序列），依此条件输出另外一个句子（文字序列）。这跟在[让AI写点金庸](https://leemeng.tw/how-to-generate-interesting-text-with-tensorflow2-and-tensorflow-js.html)一文中会随机生成天龙八部文章的[语言模型（Language Model）](https://zh.wikipedia.org/wiki/語言模型)是有所差异的：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/lstm-sequence-generation.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 随机序列生成的例子：一个以LSTM实作的简单语言模型（[图片来源](https://leemeng.tw/how-to-generate-interesting-text-with-tensorflow2-and-tensorflow-js.html)）
 
 
@@ -200,7 +196,6 @@ Seq2Seq模型里头Encoder跟Decoder是各自独立的RNN。Encoder把输入的�
 好啦，你现在应该已经了解如何使用Seq2Seq 模型来做NMT 了，不过现在让我们再次复习其运作方式。这次我们把用RNN 实作的Encoder / Decoder 在每个时间点做的事情从左到右一字排开：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/seq2seq-unrolled-no-attention.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 以RNN为基础的Seq2Seq模型做NMT的流程（[图片来源](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/)）
 
 
@@ -220,7 +215,6 @@ Seq2Seq模型里头Encoder跟Decoder是各自独立的RNN。Encoder把输入的�
 以下就是将注意力机制加到Seq2Seq 模型后的结果：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/seq2seq-unrolled-with-attention.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 注意力机制让Decoder在生成新序列时能查看Encoder里所有可能有用的隐状态向量（[图片来源](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/)）
 
 
@@ -230,7 +224,6 @@ Seq2Seq模型里头Encoder跟Decoder是各自独立的RNN。Encoder把输入的�
 现在你会看到Encoder把处理完每个词汇所产生的向量都交给Decoder了。且透过注意力机制，Decoder在生成新序列的每个元素时都能**动态地**考虑自己要看哪些Encoder的向量（还有决定从中该撷取多少资讯），因此这种运用注意力机制的Seq2Seq架构又被称作[动态的条件序列生成（Dynamic Conditional Generation）](https://youtu.be/ZjfjPzXw6og?t=3528)。
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/seq2seq_detail.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 法翻英时，Decoder在生成每个英文词汇时都在Encoder的每个输出向量上放不同的注意程度（[图片来源](https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/)）
 
 
@@ -284,7 +277,6 @@ Seq2Seq模型里头Encoder跟Decoder是各自独立的RNN。Encoder把输入的�
 跟Google 10 年前推出的PBMT 系统比起来，翻译错误率平均下降了60 %。
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/nmt-model-fast.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 利用注意力机制的GNMT让Decoder在生成「Knowledge」时能放注意力在Encoder处理完「知」与「识」的两个输出向量e0 & e1 （[图片来源](https://ai.googleblog.com/2016/09/a-neural-network-for-machine.html)）
 
 
@@ -293,7 +285,9 @@ Seq2Seq模型里头Encoder跟Decoder是各自独立的RNN。Encoder把输入的�
 
 因为其卓越的翻译品质，在GNMT 推出的那段时间，搭配注意力机制的Seq2Seq 模型基本上就是拿来做NMT 系统的不二人选。
 
-![img](imgs/nmt-vs-pbmt.png)NMT、PBMT以及人类在中英翻译时的结果比较（[图片来源](https://ai.googleblog.com/2016/09/a-neural-network-for-machine.html)）
+![img](imgs/nmt-vs-pbmt.png)
+
+NMT、PBMT以及人类在中英翻译时的结果比较（[图片来源](https://ai.googleblog.com/2016/09/a-neural-network-for-machine.html)）
 
 
 
@@ -362,7 +356,6 @@ repr.为[representation](https://dictionary.cambridge.org/zht/詞典/英語-漢�
 以下则是Transformer 实际上将英文句子翻译到法文的过程：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/transformer-nmt-encode-decode.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 用Transformer将英文句子翻译到法文的例子（[图片来源](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)）
 
 
@@ -380,7 +373,9 @@ repr.为[representation](https://dictionary.cambridge.org/zht/詞典/英語-漢�
 
 如果你看懂这张图的资讯流动，就等于了解Transformer的核心精神了，恭喜！如果仍然有不明了的地方，可以搭配我上面的说明多看几遍动画或是直接阅读[Google AI部落格的原文介绍](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)。
 
-![img](imgs/en-ge-bleu-comparison.png)Transformer释出时与其他模型在英德翻译资料集上的比较（[图片来源](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)）
+![img](imgs/en-ge-bleu-comparison.png)
+
+Transformer释出时与其他模型在英德翻译资料集上的比较（[图片来源](https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html)）
 
 
 
@@ -449,7 +444,6 @@ repr.为[representation](https://dictionary.cambridge.org/zht/詞典/英語-漢�
 就算不说理论跟实作的差异，让我们看看[TensorFlow官方释出的最新Transformer教学](https://www.tensorflow.org/alpha/tutorials/text/transformer)里头有多少内容：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/tf-tutorial-oveview.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 TensorFlow 官方的Transformer 教学
 
 
@@ -498,7 +492,6 @@ TensorFlow 官方的Transformer 教学
 另外你之后也可以随时透过左侧导览的图片icon 来快速回顾Transformer 的整体架构以及教授添加的注解。我相信在实作的时候它可以帮得上点忙：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/transformer-left-nav.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 
 
 有了这些背景知识以后，在理解程式码时会轻松许多。你也可以一边执行[TensorFlow官方的Colab笔记本](https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/r2/tutorials/text/transformer.ipynb)一边参考底下实作。
@@ -609,7 +602,6 @@ clear_output()
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/tfds-demo.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
 
 
-
 上面的指令约需2分钟完成，而在过程中`tfds`帮我们完成不少工作：
 
 - 下载包含原始数据的压缩档
@@ -646,7 +638,10 @@ split
 我们将前两个splits 拿来当作训练以及验证集，剩余的部分（第3 个split）舍弃不用：
 
 ```python
-examples = builder . as_dataset ( split = split , as_supervised = True ) train_examples , val_examples , _ = examples print ( train_examples ) print ( val_examples )   
+examples = builder.as_dataset(split=split,as_supervised=True) 
+train_examples,val_examples,_ = examples 
+print(train_examples) 
+print(val_examples)   
     
 <_OptionsDataset shapes: ((), ()), types: (tf.string, tf.string)>
 <_OptionsDataset shapes: ((), ()), types: (tf.string, tf.string)>
@@ -1179,7 +1174,6 @@ tar: tf.Tensor(
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/inp_tar.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
 
 
-
 这样清楚多了不是吗？现在点击播放键，将索引序列还原成原始的子词序列。
 
 你可以清楚地看到每个**原始**句子前后都有``与``。而为了让同个batch里头的序列长度相同，我们在较短的序列后面也补上足够的0，代表着``。
@@ -1265,7 +1259,6 @@ emb_tar: tf.Tensor(
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/emb_inp_tar.jpeg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
 
 
-
 依照前面提过的准则，张量中第一个维度的`2`代表着句子数`batch_size`。在3维空间里头，我会将不同句子画在z轴上，也就是你现在把脸贴近/远离萤幕这个维度。你同时也能用不同颜色来区分句子。
 
 紧跟着句子的下一个维度则一样是本来的子词（subword）。只是现在每个子词都已从一个索引数字被转换成一个4 维的词嵌入向量，因此每个子词都以y 轴来表示。最后一维则代表着词嵌入空间的维度，一样以x 轴来表示。
@@ -1340,7 +1333,6 @@ tf.squeeze(inp_mask): tf.Tensor(
 你可以看到`inp_mask`将`inp`里头为`0`的对应位置设为1凸显出来，这样之后其他函式就知道要把哪边「遮住」。让我们看看被降到2维的`inp_mask`是怎么被套用在`inp`身上的：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/padding_mask.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 
 
 很好懂，不是吗？但这只是小暖身，等到之后要将遮罩broadcast 到3、4 维张量的时候你可能会黑人问号，所以最好做点心理准备（笑
@@ -1534,7 +1526,6 @@ attention_weights: tf.Tensor(
 下面则是我们实作的注意函式的所有输入与输出张量。透过多次的矩阵运算，注意力机制能让查询Q 跟键值K 做匹配，再依据此匹配程度将值V 做加权平均获得新的representation。
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/scaled_dot_product_attention.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 Scaled dot product attention 的实际运算过程
 
 
@@ -1570,7 +1561,6 @@ attention_weights = tf.nn.softmax(scaled_attention_logits, axis=-1)
 如果你刚刚有仔细看上面的动画的话（17秒之后），应该能想像`scaled_attention_logits`的shape为（batch_size, seq_len_q, seq_len_k）。其最后一个维度代表某个序列`q`里的某个子词与序列`k`的**每个**子词的匹配程度，但加总不为1。而为了之后跟与`k`对应的`v`做加权平均，我们针对最后一个维度做softmax运算使其和为1，也就是上图`axis=-1`的部分：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/softmax.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 对最后一维做softmax。模型还没经过训练所以「注意力」非常平均
 
 
@@ -1696,7 +1686,6 @@ array([[[0.        , 0.        ],
 如果听完我的碎碎念你还是无法理解以上结果，或是不确定有遮罩的注意函式到底怎么运作，就实际看看其中的计算过程吧！
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/padding_mask_in_attn_func.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 将padding mask 应用到自注意力机制运算（q = k）
 
 
@@ -1853,7 +1842,6 @@ array([[0.49974996, 0.50025004, 0.        , 0.        , 0.        ,
 挺酷的，不是吗？
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/look_ahead_mask_in_attn_func.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 look ahead mask 让每个子词都只关注序列中自己与之前的位置
 
 在实际做矩阵运算的时候我们当然还是会让注意权重为0的位置跟对应的`v`相乘，但是上图的黑框才是实际会对最后的`output`值造成影响的权重与`v`。
@@ -2001,7 +1989,6 @@ output: tf.Tensor(
 不过如果你不熟TensorFlow API或是矩阵运算，或许无法马上理解head的维度在哪里、还有不同heads之间有什么差异。为了帮助你直观理解`split_heads`函式，我将运算过程中产生的张量都视觉化出来给你瞧瞧：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/split_heads.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 split_heads 函式将3 维张量转换为multi-head 的4 维张量过程
 
 
@@ -2158,7 +2145,6 @@ output: tf.Tensor(
 如果你还无法想像每个计算步骤，让我们看看multi-head attention是怎么将输入的`q`、`k`以及`v`转换成最后的`output`的：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/multi-head-attention.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 Multi-head attention 完整计算过程
 
 
@@ -2186,7 +2172,6 @@ multi-head attention的输出张量`output`里头每个句子的每个字词的r
 你可以点击下方的影片来了解接下来的实作顺序：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/steps-to-build-transformer.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 一步步打造Transformer
 
 
@@ -2291,7 +2276,6 @@ array([[ 2.8674245, -2.174698 , -1.3073452, -6.4233937],
 有了**M** ulti- **H** ead **A** ttention（MHA）以及**F** eed- **F** orward **N** etwork（FFN），我们事实上已经可以实作第一个Encoder layer了。让我们复习一下这layer里头有什么重要元件：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/encoder-layer.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 Encoder layer 里的重要元件
 
 
@@ -2437,7 +2421,6 @@ enc_out: tf.Tensor(
 你也可以看一下影片来回顾它们所在的位置：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/decoder-layer.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 Decoder layer 中的sub-layers
 
 
@@ -3066,7 +3049,6 @@ Decoder 的输出你现在应该都可以很轻松地解读才是。基本上跟
 没错，终于到了这个时刻。在实作Transformer 之前先点击影片来简单回顾一下我们在这一章实作了什么些玩意儿：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/transformer-imple.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 Transformer 本身只有3 个layers
 
 
@@ -3229,7 +3211,6 @@ predictions, attn_weights = transformer(inp, tar_inp, False, ...)
 这样讲很抽象，让我们看个影片了解序列生成是怎么运作的：
 
 <video controls="" muted="" playsinline="" poster="https://leemeng.tw/images/transformer/how-sequence-generation-work.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 了解序列生成以及如何训练一个生成模型
 
 
