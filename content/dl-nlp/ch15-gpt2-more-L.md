@@ -5,7 +5,6 @@
 这篇文章将简单介绍[OpenAI](https://openai.com/)在今年提出的知名**语言模型** [GPT-2](https://openai.com/blog/better-language-models)，并展示一个能够用来生成金庸风格文本的小型GPT-2。在读完本文之后，你也能使用我的[Colab笔记本](https://colab.research.google.com/drive/1MaT8-HUHfZkdCra0OqZEIr0IFCq0MJBx)来生成属于你自己的金庸小说。文中也将透过视觉化工具[BertViz](https://github.com/jessevig/bertviz)让你能够直观地感受GPT-2等[基于Transformer架构的NLP模型](https://leemeng.tw/neural-machine-translation-with-transformer-and-tensorflow2.html)如何利用[注意力机制（Attention Mechanism）](https://www.youtube.com/watch?v=jd9DtlR90ak&feature=youtu.be)来生成文本。
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/gpt2/gpt2-colab-demo.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 本文的Colab 笔记本让你可以自己生成金庸桥段并可视化结果
 
 
@@ -120,7 +119,6 @@ GPT-2的前身是[GPT](https://blog.openai.com/language-unsupervised/)，其全�
 其他相关应用多如牛毛。比方说之前介绍过的[This Waifu Does Not Exist](https://www.thiswaifudoesnotexist.net/)在使用GAN生成动漫头像的同时也利用GPT-2随机生成一段动漫剧情；而[TabNine](https://tabnine.com/)则是一个加拿大团队利用GPT-2做智慧auto-complete的开发工具，志在让工程师们减少不必要的打字，甚至推荐更好的写法：
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/gpt2/tabnine_demo_java_3.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 TabNine 透过GPT-2 让工程师更有效率地开发程式（以Java 为例）
 
 
@@ -242,7 +240,6 @@ show(gpt2_model, tokenizer, text, view)
 ```
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/gpt2/gpt-bertviz-model-view.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px;"></video>
-
 BertViz 的model view 让你轻松「鸟瞰」整个模型。这里只显示第6 - 9 层blocks（zero-index）
 
 
@@ -260,7 +257,6 @@ show(gpt2_model, tokenizer, text, view)
 ```
 
 <video autoplay="" loop="" muted="" playsinline="" poster="https://leemeng.tw/images/gpt2/gpt-seq-generation.jpg" style="box-sizing: inherit; display: block; max-width: 100%; height: auto; margin: auto; width: 880px; mix-blend-mode: initial;"></video>
-
 GPT-2 在生成新词汇时会持续透过自注意力机制关注前文
 
 
