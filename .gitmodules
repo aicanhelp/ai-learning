@@ -4,3 +4,48 @@
 [submodule "resources/nmt"]
 	path = resources/nmt
 	url = https://github.com/tensorflow/nmt.git
+[submodule "resources/fastai"]
+	path = resources/fastai
+	url = https://github.com/fastai/fastai.git
+[submodule "resources/fastai-course-v3"]
+	path = resources/fastai-course-v3
+	url = https://github.com/fastai/course-v3.git
+[submodule "resources/transformers"]
+	path = resources/transformers
+	url = https://github.com/huggingface/transformers.git
+[submodule "resources/DeepSpeed"]
+	path = resources/DeepSpeed
+	url = https://github.com/microsoft/DeepSpeed.git
+[submodule "resources/Megatron-LM"]
+	path = resources/Megatron-LM
+	url = https://github.com/NVIDIA/Megatron-LM.git
+[submodule "resources/GPT2-Chinese"]
+	path = resources/GPT2-Chinese
+	url = https://github.com/Morizeyao/GPT2-Chinese.git
+[submodule "resources/pytorch-examples"]
+	path = resources/pytorch-examples
+	url = https://github.com/pytorch/examples.git
+[submodule "resources/gpt-2-simple"]
+	path = resources/gpt-2-simple
+	url = https://github.com/minimaxir/gpt-2-simple.git
+[submodule "resources/gpt2-bert-bot"]
+	path = resources/gpt2-bert-bot
+	url = https://github.com/lots-of-things/gpt2-bert-reddit-bot.git
+[submodule "resources/textgenrnn"]
+	path = resources/textgenrnn
+	url = https://github.com/minimaxir/textgenrnn.git
+[submodule "resources/allennlp"]
+	path = resources/allennlp
+	url = https://github.com/allenai/allennlp.git
+[submodule "resources/allennlp-example"]
+	path = resources/allennlp-example
+	url = https://github.com/allenai/allennlp-as-a-library-example.git
+[submodule "resources/ml-nlp"]
+	path = resources/ml-nlp
+	url = https://github.com/NLP-LOVE/ML-NLP.git
+[submodule "resources/ChatterBot"]
+	path = resources/ChatterBot
+	url = https://github.com/gunthercox/ChatterBot.git
+[submodule "resources/nlp-architect"]
+	path = resources/nlp-architect
+	url = https://github.com/NervanaSystems/nlp-architect.git
