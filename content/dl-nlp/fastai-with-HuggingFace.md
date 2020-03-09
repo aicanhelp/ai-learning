@@ -37,14 +37,14 @@
 
 In [1]:
 
-```
+```python
 %%bash
 pip install -q transformers
 ```
 
 In [2]:
 
-```
+```python
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 from pathlib import Path 
@@ -75,7 +75,7 @@ fastai和Transformers库的当前版本分别为1.0.58和2.5.1。
 
 In [3]:
 
-```
+```python
 import fastai
 import transformers
 print('fastai version :', fastai.__version__)
@@ -100,7 +100,7 @@ transformers version : 2.5.1
 
 In [4]:
 
-```
+```python
 for dirname, _, filenames in os.walk('/kaggle/input'):
     for filename in filenames:
         print(os.path.join(dirname, filename))
@@ -111,13 +111,12 @@ for dirname, _, filenames in os.walk('/kaggle/input'):
 
 In [5]:
 
-```
+```python
 DATA_ROOT = Path("..") / "/kaggle/input/sentiment-analysis-on-movie-reviews"
 train = pd.read_csv(DATA_ROOT / 'train.tsv.zip', sep="\t")
 test = pd.read_csv(DATA_ROOT / 'test.tsv.zip', sep="\t")
 print(train.shape,test.shape)
 train.head()
-(156060, 4) (66292, 3)
 ```
 
 ```
@@ -150,7 +149,7 @@ Out[5]:
 
 In [6]:
 
-```
+```python
 MODEL_CLASSES = {
     'bert': (BertForSequenceClassification, BertTokenizer, BertConfig),
     'xlnet': (XLNetForSequenceClassification, XLNetTokenizer, XLNetConfig),
@@ -164,7 +163,7 @@ MODEL_CLASSES = {
 
 In [7]:
 
-```
+```python
 # Parameters
 seed = 42
 use_fp16 = False
@@ -188,7 +187,7 @@ pretrained_model_name = 'roberta-base'
 
 In [8]:
 
-```
+```python
 model_class, tokenizer_class, config_class = MODEL_CLASSES[model_type]
 ```
 
@@ -196,13 +195,13 @@ model_class, tokenizer_class, config_class = MODEL_CLASSES[model_type]
 
 In [9]:
 
-```
+```python
 model_class.pretrained_model_archive_map.keys()
 ```
 
 Out[9]:
 
-```
+```python
 dict_keys(['roberta-base', 'roberta-large', 'roberta-large-mnli', 'distilroberta-base', 'roberta-base-openai-detector', 'roberta-large-openai-detector'])
 ```
 
@@ -222,7 +221,7 @@ dict_keys(['roberta-base', 'roberta-large', 'roberta-large-mnli', 'distilroberta
 
 In [10]:
 
-```
+```python
 def seed_all(seed_value):
     random.seed(seed_value) # Python
     np.random.seed(seed_value) # cpu vars
@@ -237,7 +236,7 @@ def seed_all(seed_value):
 
 In [11]:
 
-```
+```python
 seed_all(seed)
 ```
 
@@ -247,7 +246,7 @@ seed_all(seed)
 
 在该`fastai`库中，创建时会自动完成数据预处理`DataBunch`。正如您将在`DataBunch`实现中看到的那样，**令牌化器**和**数字****化**器以以下格式在处理器参数中传递：
 
-```
+```python
 processor = [TokenizeProcessor(tokenizer=tokenizer,...), NumericalizeProcessor(vocab=vocab,...)]
 ```
 
@@ -265,7 +264,7 @@ processor = [TokenizeProcessor(tokenizer=tokenizer,...), NumericalizeProcessor(v
 
 In [12]:
 
-```
+```python
 class TransformersBaseTokenizer(BaseTokenizer):
     """Wrapper around PreTrainedTokenizer to be compatible with fast.ai"""
     def __init__(self, pretrained_tokenizer: PreTrainedTokenizer, model_type = 'bert', **kwargs):
@@ -294,7 +293,7 @@ class TransformersBaseTokenizer(BaseTokenizer):
 
 In [13]:
 
-```
+```python
 transformer_tokenizer = tokenizer_class.from_pretrained(pretrained_model_name)
 transformer_base_tokenizer = TransformersBaseTokenizer(pretrained_tokenizer = transformer_tokenizer, model_type = model_type)
 fastai_tokenizer = Tokenizer(tok_func = transformer_base_tokenizer, pre_rules=[], post_rules=[])
@@ -341,7 +340,7 @@ xlnet:      padding + tokens + [SEP] + [CLS]
 
 In [14]:
 
-```
+```python
 class TransformersVocab(Vocab):
     def __init__(self, tokenizer: PreTrainedTokenizer):
         super(TransformersVocab, self).__init__(itos = [])
@@ -374,7 +373,7 @@ class TransformersVocab(Vocab):
 
 In [15]:
 
-```
+```python
 transformer_vocab =  TransformersVocab(tokenizer = transformer_tokenizer)
 numericalize_processor = NumericalizeProcessor(vocab=transformer_vocab)
 
@@ -391,14 +390,14 @@ transformer_processor = [tokenize_processor, numericalize_processor]
 
 In [16]:
 
-```
+```python
 pad_first = bool(model_type in ['xlnet'])
 pad_idx = transformer_tokenizer.pad_token_id
 ```
 
 In [17]:
 
-```
+```python
 tokens = transformer_tokenizer.tokenize('Salut c est moi, Hello it s me')
 print(tokens)
 ids = transformer_tokenizer.convert_tokens_to_ids(tokens)
@@ -418,7 +417,7 @@ Out[17]:
 
 In [18]:
 
-```
+```python
 databunch = (TextList.from_df(train, cols='Phrase', processor=transformer_processor)
              .split_by_rand_pct(0.1,seed=seed)
              .label_from_df(cols= 'Sentiment')
@@ -430,16 +429,18 @@ databunch = (TextList.from_df(train, cols='Phrase', processor=transformer_proces
 
 In [19]:
 
-```
+```python
 print('[CLS] token :', transformer_tokenizer.cls_token)
 print('[SEP] token :', transformer_tokenizer.sep_token)
 print('[PAD] token :', transformer_tokenizer.pad_token)
 databunch.show_batch()
+
+```
+```
 [CLS] token : <s>
 [SEP] token : </s>
 [PAD] token : <pad>
-```
-
+    
 | text                                                         | target |
 | :----------------------------------------------------------- | :----- |
 | <s> Ġ- L RB - ĠCity Ġ- RR B - Ġreminds Ġus Ġhow Ġrealistically Ġnuanced Ġa ĠRobert ĠDe ĠN iro Ġperformance Ġcan Ġbe Ġwhen Ġhe Ġis Ġnot Ġmore Ġluc r atively Ġengaged Ġin Ġthe Ġshameless Ġself - car ic ature Ġof Ġ` ĠAnaly ze ĠThis Ġ' Ġ- L RB - Ġ1999 Ġ- RR B - Ġand Ġ` ĠAnaly ze ĠThat Ġ, Ġ' Ġpromised Ġ- L RB - Ġor Ġthreatened Ġ- | 3      |
@@ -447,18 +448,22 @@ databunch.show_batch()
 | <s> ĠParker Ġshould Ġbe Ġcomm ended Ġfor Ġtaking Ġa Ġfresh Ġapproach Ġto Ġfamiliar Ġmaterial Ġ, Ġbut Ġhis Ġdetermination Ġto Ġremain Ġtrue Ġto Ġthe Ġoriginal Ġtext Ġleads Ġhim Ġto Ġadopt Ġa Ġsomewhat Ġman nered Ġtone Ġ... Ġthat Ġultimately Ġdull s Ġthe Ġhuman Ġtragedy Ġat Ġthe Ġstory Ġ' s Ġcore </s> | 2      |
 | <s> ĠIt Ġ' s Ġa Ġlong Ġway Ġfrom ĠOrwell Ġ' s Ġdark Ġ, Ġintelligent Ġwarning Ġcry Ġ- L RB - Ġ1984 Ġ- RR B - Ġto Ġthe Ġempty Ġstud Ġknock about Ġof ĠEqu ilibrium Ġ, Ġand Ġwhat Ġonce Ġwas Ġconviction Ġis Ġnow Ġaffect ation Ġ. </s> | 1      |
 | <s> ĠA Ġdifferent Ġand Ġemotionally Ġreserved Ġtype Ġof Ġsurvival Ġstory Ġ-- Ġa Ġfilm Ġless Ġabout Ġref ract ing Ġall Ġof ĠWorld ĠWar ĠII Ġthrough Ġthe Ġspecific Ġconditions Ġof Ġone Ġman Ġ, Ġand Ġmore Ġabout Ġthat Ġman Ġlost Ġin Ġits Ġmidst Ġ. </s> | 3      |
+```
 
 检查批处理和数字化器：
 
 In [20]:
 
-```
+```python
 print('[CLS] id :', transformer_tokenizer.cls_token_id)
 print('[SEP] id :', transformer_tokenizer.sep_token_id)
 print('[PAD] id :', pad_idx)
 test_one_batch = databunch.one_batch()[0]
 print('Batch shape : ',test_one_batch.shape)
 print(test_one_batch)
+
+```
+```
 [CLS] id : 0
 [SEP] id : 2
 [PAD] id : 1
@@ -471,14 +476,14 @@ tensor([[    0,   111,   574,  ...,    76,   479,     2],
         [    0,    33, 30291,  ...,     1,     1,     1],
         [    0, 45518, 10730,  ...,     1,     1,     1]])
 ```
-
+    
 ### 定制模型
 
 如所提到的[在这里](https://github.com/huggingface/transformers#models-always-output-tuples)，每一个模型的正向方法总是输出一个`tuple`具有取决于模型中的各种元件和配置参数。在我们的情况下，我们只希望访问logits。访问它们的一种方法是创建自定义模型。
 
 In [21]:
 
-```
+```python
 # defining our model architecture 
 class CustomTransformerModel(nn.Module):
     def __init__(self, transformer_model: PreTrainedModel):
@@ -502,7 +507,7 @@ class CustomTransformerModel(nn.Module):
 
 In [22]:
 
-```
+```python
 config = config_class.from_pretrained(pretrained_model_name)
 config.num_labels = 5
 config.use_bfloat16 = use_fp16
@@ -513,7 +518,7 @@ Downloading: 100%
 
 524/524 [00:00<00:00, 881B/s]
 
-```
+```python
 RobertaConfig {
   "architectures": [
     "RobertaForMaskedLM"
@@ -565,7 +570,7 @@ RobertaConfig {
 
 In [23]:
 
-```
+```python
 transformer_model = model_class.from_pretrained(pretrained_model_name, config = config)
 # transformer_model = model_class.from_pretrained(pretrained_model_name, num_labels = 5)
 
@@ -582,7 +587,7 @@ Downloading: 100%
 
 In [24]:
 
-```
+```python
 from fastai.callbacks import *
 from transformers import AdamW
 from functools import partial
@@ -611,8 +616,10 @@ if use_fp16: learner = learner.to_fp16()
 
 In [25]:
 
-```
+```python
 print(learner.model)
+```
+```
 CustomTransformerModel(
   (transformer): RobertaForSequenceClassification(
     (roberta): RobertaModel(
@@ -927,7 +934,7 @@ CustomTransformerModel(
 
 In [26]:
 
-```
+```python
 # For DistilBERT
 # list_layers = [learner.model.transformer.distilbert.embeddings,
 #                learner.model.transformer.distilbert.transformer.layer[0],
@@ -975,11 +982,13 @@ Check groups :
 
 In [27]:
 
-```
+```python
 learner.split(list_layers)
 num_groups = len(learner.layer_groups)
 print('Learner split in',num_groups,'groups')
 print(learner.layer_groups)
+```
+```
 Learner split in 14 groups
 [Sequential(
   (0): Embedding(50265, 768, padding_idx=1)
@@ -1148,13 +1157,13 @@ Note that I didn't found any document that has studied the influence of **Discri
 
 In [28]:
 
-```
+```python
 learner.save('untrain')
 ```
 
 In [29]:
 
-```
+```python
 seed_all(seed)
 learner.load('untrain');
 ```
@@ -1163,7 +1172,7 @@ learner.load('untrain');
 
 In [30]:
 
-```
+```python
 learner.freeze_to(-1)
 ```
 
@@ -1171,7 +1180,7 @@ We check which layer are trainable.
 
 In [31]:
 
-```
+```python
 learner.summary()
 ```
 
@@ -1484,14 +1493,14 @@ Callbacks functions applied
 
 In [32]:
 
-```
+```python
 learner.lr_find()
 LR Finder is complete, type {learner_name}.recorder.plot() to see the graph.
 ```
 
 In [33]:
 
-```
+```python
 learner.recorder.plot(skip_end=10,suggestion=True)
 Min numerical gradient: 3.63E-03
 Min loss divided by 10: 4.37E-04
@@ -1505,7 +1514,7 @@ Min loss divided by 10: 4.37E-04
 
 In [34]:
 
-```
+```python
 learner.fit_one_cycle(1,max_lr=2e-03,moms=(0.8,0.7))
 ```
 
@@ -1517,13 +1526,13 @@ learner.fit_one_cycle(1,max_lr=2e-03,moms=(0.8,0.7))
 
 In [35]:
 
-```
+```python
 learner.save('first_cycle')
 ```
 
 In [36]:
 
-```
+```python
 seed_all(seed)
 learner.load('first_cycle');
 ```
@@ -1532,13 +1541,13 @@ learner.load('first_cycle');
 
 In [37]:
 
-```
+```python
 learner.freeze_to(-2)
 ```
 
 In [38]:
 
-```
+```python
 lr = 1e-5
 ```
 
@@ -1546,7 +1555,7 @@ lr = 1e-5
 
 In [39]:
 
-```
+```python
 learner.fit_one_cycle(1, max_lr=slice(lr*0.95**num_groups, lr), moms=(0.8, 0.9))
 ```
 
@@ -1558,26 +1567,26 @@ learner.fit_one_cycle(1, max_lr=slice(lr*0.95**num_groups, lr), moms=(0.8, 0.9))
 
 In [40]:
 
-```
+```python
 learner.save('second_cycle')
 ```
 
 In [41]:
 
-```
+```python
 seed_all(seed)
 learner.load('second_cycle');
 ```
 
 In [42]:
 
-```
+```python
 learner.freeze_to(-3)
 ```
 
 In [43]:
 
-```
+```python
 learner.fit_one_cycle(1, max_lr=slice(lr*0.95**num_groups, lr), moms=(0.8, 0.9))
 ```
 
@@ -1589,13 +1598,13 @@ learner.fit_one_cycle(1, max_lr=slice(lr*0.95**num_groups, lr), moms=(0.8, 0.9))
 
 In [44]:
 
-```
+```python
 learner.save('third_cycle')
 ```
 
 In [45]:
 
-```
+```python
 seed_all(seed)
 learner.load('third_cycle');
 ```
@@ -1604,13 +1613,13 @@ learner.load('third_cycle');
 
 In [46]:
 
-```
+```python
 learner.unfreeze()
 ```
 
 In [47]:
 
-```
+```python
 learner.fit_one_cycle(2, max_lr=slice(lr*0.95**num_groups, lr), moms=(0.8, 0.9))
 ```
 
@@ -1630,7 +1639,7 @@ learner.fit_one_cycle(2, max_lr=slice(lr*0.95**num_groups, lr), moms=(0.8, 0.9))
 
 In [48]:
 
-```
+```python
 learner.predict('This is the best movie of 2020')
 ```
 
@@ -1644,7 +1653,7 @@ Out[48]:
 
 In [49]:
 
-```
+```python
 learner.predict('This is the worst movie of 2020')
 ```
 
@@ -1662,8 +1671,10 @@ Out[49]:
 
 In [50]:
 
-```
+```python
 learner.export(file = 'transformer.pkl');
+```
+```
 /opt/conda/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type CrossEntropyLoss. It won't be checked for correctness upon loading.
   "type " + obj.__name__ + ". It won't be checked "
 /opt/conda/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type CustomTransformerModel. It won't be checked for correctness upon loading.
@@ -1708,7 +1719,7 @@ learner.export(file = 'transformer.pkl');
 
 In [51]:
 
-```
+```python
 path = '/kaggle/working'
 export_learner = load_learner(path, file = 'transformer.pkl')
 ```
@@ -1717,7 +1728,7 @@ export_learner = load_learner(path, file = 'transformer.pkl')
 
 In [52]:
 
-```
+```python
 export_learner.predict('This is the worst movie of 2020')
 ```
 
@@ -1737,7 +1748,7 @@ Out[52]:
 
 In [53]:
 
-```
+```python
 def get_preds_as_nparray(ds_type) -> np.ndarray:
     """
     the get_preds method does not yield the elements in order by default
@@ -1753,7 +1764,7 @@ test_preds = get_preds_as_nparray(DatasetType.Test)
 
 In [54]:
 
-```
+```python
 sample_submission = pd.read_csv(DATA_ROOT / 'sampleSubmission.csv')
 sample_submission['Sentiment'] = np.argmax(test_preds,axis=1)
 sample_submission.to_csv("predictions.csv", index=False)
@@ -1763,7 +1774,7 @@ We check the order.
 
 In [55]:
 
-```
+```python
 test.head()
 ```
 
@@ -1779,7 +1790,7 @@ Out[55]:
 
 In [56]:
 
-```
+```python
 sample_submission.head()
 ```
 
@@ -1795,7 +1806,7 @@ Out[56]:
 
 In [57]:
 
-```
+```python
 from IPython.display import HTML
 
 def create_download_link(title = "Download CSV file", filename = "data.csv"):  
