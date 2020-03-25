@@ -49,3 +49,18 @@
 [submodule "resources/nlp-architect"]
 	path = resources/nlp-architect
 	url = https://github.com/NervanaSystems/nlp-architect.git
+[submodule "resources/hanlp"]
+	path = resources/hanlp
+	url = https://github.com/hankcs/HanLP.git
+[submodule "resources/gpt2-ml"]
+	path = resources/gpt2-ml
+	url = https://github.com/imcaspar/gpt2-ml.git
+[submodule "resources/pynlp"]
+	path = resources/pynlp
+	url = https://github.com/sliderSun/pynlp.git
+[submodule "resources/Chinese-XLNet"]
+	path = resources/Chinese-XLNet
+	url = https://github.com/ymcui/Chinese-XLNet.git
+[submodule "resources/Chinese-BERT-wwm"]
+	path = resources/Chinese-BERT-wwm
+	url = https://github.com/ymcui/Chinese-BERT-wwm.git

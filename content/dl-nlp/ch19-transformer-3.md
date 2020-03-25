@@ -85,7 +85,7 @@ seaborn.set_context(context="talk")
 
 # 模型架构
 
-大多数竞争性神经序列转导模型具有编码器-解码器结构[（引用）](https://arxiv.org/abs/1409.0473)。在此, 编码器映射一个符号表示的输入序列 (x1,…,xn)(x1,…,xn) 到一个连续表示的序列 **z**=(z1,…,zn)z=(z1,…,zn). 通过 **z**z, 解码器按一次一个符号的方式生产一个输出序列 (y1,…,ym)(y1,…,ym) . 模型的每一步都是自动回归的 [（引用）](https://arxiv.org/abs/1308.0850)，在生成下一个时，会将先前生成的符号用作附加输入。
+大多数竞争性神经序列转导模型具有编码器-解码器结构[（引用）](https://arxiv.org/abs/1409.0473)。在此, 编码器映射一个符号表示的输入序列 (x1,…,xn)到一个连续表示的序列 **z**=(z1,…,zn). 通过 **z**, 解码器按一次一个符号的方式生产一个输出序列 (y1,…,ym) . 模型的每一步都是自动回归的 [（引用）](https://arxiv.org/abs/1308.0850)，在生成下一个时，会将先前生成的符号用作附加输入。
 
 ```python
 class EncoderDecoder(nn.Module):
@@ -133,7 +133,7 @@ Image(filename='images/ModalNet-21.png')
 
 ### 编码器
 
-编码器由相同的N=6N=6的层栈构成。
+编码器由相同的N=6的层栈构成。
 
 ```python
 def clones(module, N):
@@ -570,10 +570,6 @@ def batch_size_fn(new, count, sofar):
 我们在一台装有8个NVIDIA P100 GPU的计算机上训练了模型。对于使用本文所述的超参数的基本模型，每个训练步骤大约需要0.4秒。我们对基本模型进行了总共100,000步或12个小时的训练。对于我们的大型模型，步长为1.0秒。大型模型接受了300,000步（3.5天）的培训。
 
 ## 优化器
-
-$$d_{model }^{-0.5}$$
-$$rate=d_{model }^{-0.5} \cdot min (step_{-} \text {num}^{-0.5}, {step}_{-} \text{num} \cdot warmup_{-} \text {steps}^{-1.5}) $$
-$$warmup_{-} \text {steps}^{-1.5}$$
 
 我们使用Adam优化器 [(cite)](https://arxiv.org/abs/1412.6980)并使用参数 $\beta_{1}=0.9, \beta_{2}=0.98 \text { and } \epsilon=10^{-9}
 $. 我们根据下面的公司在训练中改变学习率:
