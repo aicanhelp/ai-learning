@@ -64,3 +64,6 @@
 [submodule "resources/Chinese-BERT-wwm"]
 	path = resources/Chinese-BERT-wwm
 	url = https://github.com/ymcui/Chinese-BERT-wwm.git
+[submodule "resources/Chinese-ELECTRA"]
+	path = resources/Chinese-ELECTRA
+	url = https://github.com/ymcui/Chinese-ELECTRA.git
