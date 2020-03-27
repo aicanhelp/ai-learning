@@ -323,7 +323,9 @@ class PretrainingTrainer(PretrainingRunner):
             model = self.create_model(config, features, mode)
 
             train_op = optimization.create_optimizer(
-                model.discriminator.total_loss, config.learning_rate, config.num_train_steps,
+                model.discriminator.total_loss,
+                config.learning_rate,
+                config.num_train_steps,
                 weight_decay_rate=config.weight_decay_rate,
                 use_tpu=config.use_tpu,
                 warmup_steps=config.num_warmup_steps,
