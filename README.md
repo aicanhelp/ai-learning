@@ -1,6 +1,6 @@
 ## ai-learning
 
-- (1) Collect some famous opensource projects of AI: adding them by a submodule of git in 'resources' folder
+- (1) Collect some famous opensource projects of AI: adding them as submodules of git into 'resources' folder
 - (2) Try to refactor some projects or add some comments or do some experiments for learning them deeply: adding my codes in 'content' folder
 
 #### Records:
