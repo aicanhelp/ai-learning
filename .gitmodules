@@ -1,69 +1,72 @@
 [submodule "resources/ml_bert"]
-	path = resources/ml_bert
+	path = resources/nlp/ml_bert
 	url = https://github.com/aespresso/a_journey_into_math_of_ml.git
 [submodule "resources/nmt"]
-	path = resources/nmt
+	path = resources/nlp/nmt
 	url = https://github.com/tensorflow/nmt.git
 [submodule "resources/fastai"]
 	path = resources/fastai
 	url = https://github.com/fastai/fastai.git
 [submodule "resources/fastai-course-v3"]
-	path = resources/fastai-course-v3
+	path = resources/nlp/fastai-course-v3
 	url = https://github.com/fastai/course-v3.git
 [submodule "resources/transformers"]
-	path = resources/transformers
+	path = resources/nlp/transformers
 	url = https://github.com/huggingface/transformers.git
 [submodule "resources/DeepSpeed"]
-	path = resources/DeepSpeed
+	path = resources/nlp/DeepSpeed
 	url = https://github.com/microsoft/DeepSpeed.git
 [submodule "resources/Megatron-LM"]
-	path = resources/Megatron-LM
+	path = resources/nlp/Megatron-LM
 	url = https://github.com/NVIDIA/Megatron-LM.git
 [submodule "resources/GPT2-Chinese"]
-	path = resources/GPT2-Chinese
+	path = resources/nlp/GPT2-Chinese
 	url = https://github.com/Morizeyao/GPT2-Chinese.git
 [submodule "resources/pytorch-examples"]
 	path = resources/pytorch-examples
 	url = https://github.com/pytorch/examples.git
 [submodule "resources/gpt-2-simple"]
-	path = resources/gpt-2-simple
+	path = resources/nlp/gpt2-simple
 	url = https://github.com/minimaxir/gpt-2-simple.git
 [submodule "resources/gpt2-bert-bot"]
-	path = resources/gpt2-bert-bot
+	path = resources/nlp/gpt2-bert-bot
 	url = https://github.com/lots-of-things/gpt2-bert-reddit-bot.git
 [submodule "resources/textgenrnn"]
-	path = resources/textgenrnn
+	path = resources/nlp/textgenrnn
 	url = https://github.com/minimaxir/textgenrnn.git
 [submodule "resources/allennlp"]
-	path = resources/allennlp
+	path = resources/nlp/allennlp
 	url = https://github.com/allenai/allennlp.git
 [submodule "resources/allennlp-example"]
-	path = resources/allennlp-example
+	path = resources/nlp/allennlp-example
 	url = https://github.com/allenai/allennlp-as-a-library-example.git
 [submodule "resources/ml-nlp"]
-	path = resources/ml-nlp
+	path = resources/nlp/ml-nlp
 	url = https://github.com/NLP-LOVE/ML-NLP.git
 [submodule "resources/ChatterBot"]
 	path = resources/ChatterBot
 	url = https://github.com/gunthercox/ChatterBot.git
 [submodule "resources/nlp-architect"]
-	path = resources/nlp-architect
+	path = resources/nlp/nlp-architect
 	url = https://github.com/NervanaSystems/nlp-architect.git
 [submodule "resources/hanlp"]
-	path = resources/hanlp
+	path = resources/nlp/hanlp
 	url = https://github.com/hankcs/HanLP.git
 [submodule "resources/gpt2-ml"]
-	path = resources/gpt2-ml
+	path = resources/nlp/gpt2-ml
 	url = https://github.com/imcaspar/gpt2-ml.git
 [submodule "resources/pynlp"]
-	path = resources/pynlp
+	path = resources/nlp/pynlp
 	url = https://github.com/sliderSun/pynlp.git
 [submodule "resources/Chinese-XLNet"]
-	path = resources/Chinese-XLNet
+	path = resources/nlp/Chinese-XLNet
 	url = https://github.com/ymcui/Chinese-XLNet.git
 [submodule "resources/Chinese-BERT-wwm"]
-	path = resources/Chinese-BERT-wwm
+	path = resources/nlp/Chinese-BERT-wwm
 	url = https://github.com/ymcui/Chinese-BERT-wwm.git
 [submodule "resources/Chinese-ELECTRA"]
-	path = resources/Chinese-ELECTRA
+	path = resources/nlp/Chinese-ELECTRA
 	url = https://github.com/ymcui/Chinese-ELECTRA.git
+[submodule "resources/xgboost"]
+	path = resources/nlp/xgboost
+	url = https://github.com/dmlc/xgboost.git
