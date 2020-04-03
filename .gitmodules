@@ -73,3 +73,15 @@
 [submodule "resources/nlp/keras-bert"]
 	path = resources/nlp/keras-bert
 	url = https://github.com/CyberZHG/keras-bert.git
+[submodule "resources/bert4keras"]
+	path = resources/bert4keras
+	url = https://github.com/bojone/bert4keras.git
+[submodule "resources/bertviz"]
+	path = resources/bertviz
+	url = https://github.com/jessevig/bertviz.git
+[submodule "resources/DeepCTR"]
+	path = resources/DeepCTR
+	url = https://github.com/shenweichen/DeepCTR.git
+[submodule "resources/DeepCTR-Torch"]
+	path = resources/DeepCTR-Torch
+	url = https://github.com/shenweichen/DeepCTR-Torch.git
