@@ -85,3 +85,6 @@
 [submodule "resources/DeepCTR-Torch"]
 	path = resources/DeepCTR-Torch
 	url = https://github.com/shenweichen/DeepCTR-Torch.git
+[submodule "resources/nlp/sentence-transformers"]
+	path = resources/nlp/sentence-transformers
+	url = https://github.com/UKPLab/sentence-transformers.git
