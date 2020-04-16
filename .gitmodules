@@ -88,3 +88,12 @@
 [submodule "resources/nlp/sentence-transformers"]
 	path = resources/nlp/sentence-transformers
 	url = https://github.com/UKPLab/sentence-transformers.git
+[submodule "resources/nlp/nlp-with-pyhon"]
+	path = resources/nlp/nlp-with-pyhon
+	url = https://github.com/susanli2016/NLP-with-Python.git
+[submodule "resources/DialoGPT"]
+	path = resources/DialoGPT
+	url = https://github.com/microsoft/DialoGPT.git
+[submodule "resources/mlflow"]
+	path = resources/mlflow
+	url = https://github.com/mlflow/mlflow.git
