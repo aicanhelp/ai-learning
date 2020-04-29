@@ -97,3 +97,18 @@
 [submodule "resources/mlflow"]
 	path = resources/mlflow
 	url = https://github.com/mlflow/mlflow.git
+[submodule "resources/twine"]
+	path = resources/twine
+	url = https://github.com/pypa/twine.git
+[submodule "resources/nlp/bert4keras"]
+	path = resources/nlp/bert4keras
+	url = https://github.com/bojone/bert4keras.git
+[submodule "resources/trax"]
+	path = resources/trax
+	url = https://github.com/google/trax.git
+[submodule "resources/apex"]
+	path = resources/apex
+	url = https://github.com/NVIDIA/apex.git
+[submodule "resources/nlp/fairseq"]
+	path = resources/nlp/fairseq
+	url = https://github.com/pytorch/fairseq.git

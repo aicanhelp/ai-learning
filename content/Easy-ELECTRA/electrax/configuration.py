@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from aiharness import harnessutils as utils
 from electrax.util import tfutils
-from aiharness.configuration import ArgType, Arguments
+from aiharness.configuration import field, Arguments
 from aiharness import harnessutils as utils
 import os
 
@@ -30,15 +30,15 @@ finetune_log = utils.getLogger('finetune')
 
 @dataclass
 class DataGeneratorConfig:
-    corpus_dir: ArgType = ArgType('dataset', 'Location of pre-training text files.')
-    vocab_file: ArgType = ArgType('dataset/vocab.txt', 'Location of vocabulary file.')
-    output_dir: ArgType = ArgType('build/dataset/tf', 'Where to write out the tfrecords.')
-    max_seq_length: ArgType = ArgType(128, 'Number of tokens per example.')
-    num_process: ArgType = ArgType(4, 'Parallelize across multiple processes.')
-    blanks_separate_docs: ArgType = ArgType(True, 'Whether blank lines indicate document boundaries.')
-    do_lower_case: ArgType = ArgType(True, 'Lower case input text.')
-    no_lower_case: ArgType = ArgType(False, "Don't lower case input text.")
-    flatten: ArgType = ArgType(False, "whether the corpus file is zip/tar file.")
+    corpus_dir: str = field('dataset', 'Location of pre-training text files.')
+    vocab_file: str = field('dataset/vocab.txt', 'Location of vocabulary file.')
+    output_dir: str = field('build/dataset/tf', 'Where to write out the tfrecords.')
+    max_seq_length: int = field(128, 'Number of tokens per example.')
+    num_process: int = field(4, 'Parallelize across multiple processes.')
+    blanks_separate_docs: bool = field(True, 'Whether blank lines indicate document boundaries.')
+    do_lower_case: bool = field(True, 'Lower case input text.')
+    no_lower_case: bool = field(False, "Don't lower case input text.")
+    flatten: bool = field(False, "whether the corpus file is zip/tar file.")
 
     def update(self):
         tfutils.rmkdir(self.output_dir)
