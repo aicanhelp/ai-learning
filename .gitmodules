@@ -112,3 +112,6 @@
 [submodule "resources/nlp/fairseq"]
 	path = resources/nlp/fairseq
 	url = https://github.com/pytorch/fairseq.git
+[submodule "resources/streamlit"]
+	path = resources/streamlit
+	url = https://github.com/streamlit/streamlit.git
