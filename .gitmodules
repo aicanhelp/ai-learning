@@ -115,3 +115,12 @@
 [submodule "resources/streamlit"]
 	path = resources/streamlit
 	url = https://github.com/streamlit/streamlit.git
+[submodule "resources/ParlAI"]
+	path = resources/ParlAI
+	url = https://github.com/facebookresearch/ParlAI.git
+[submodule "resources/nlp/HarvestText"]
+	path = resources/nlp/HarvestText
+	url = https://github.com/blmoistawinde/HarvestText.git
+[submodule "resources/DeepLearningExamples"]
+	path = resources/DeepLearningExamples
+	url = https://github.com/NVIDIA/DeepLearningExamples.git
