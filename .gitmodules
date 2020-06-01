@@ -124,3 +124,6 @@
 [submodule "resources/DeepLearningExamples"]
 	path = resources/DeepLearningExamples
 	url = https://github.com/NVIDIA/DeepLearningExamples.git
+[submodule "resources/fastbook"]
+	path = resources/fastbook
+	url = https://github.com/fastai/fastbook.git
