@@ -133,3 +133,9 @@
 [submodule "resources/nlp/TurboTransformers"]
 	path = resources/nlp/TurboTransformers
 	url = https://github.com/Tencent/TurboTransformers.git
+[submodule "resources/DALI"]
+	path = resources/DALI
+	url = https://github.com/NVIDIA/DALI.git
+[submodule "resources/TensorRT"]
+	path = resources/TensorRT
+	url = https://github.com/NVIDIA/TensorRT.git
