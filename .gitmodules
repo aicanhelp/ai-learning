@@ -127,3 +127,9 @@
 [submodule "resources/fastbook"]
 	path = resources/fastbook
 	url = https://github.com/fastai/fastbook.git
+[submodule "resources/nlp/spacy-transformers"]
+	path = resources/nlp/spacy-transformers
+	url = https://github.com/explosion/spacy-transformers.git
+[submodule "resources/nlp/TurboTransformers"]
+	path = resources/nlp/TurboTransformers
+	url = https://github.com/Tencent/TurboTransformers.git
