@@ -139,3 +139,6 @@
 [submodule "resources/TensorRT"]
 	path = resources/TensorRT
 	url = https://github.com/NVIDIA/TensorRT.git
+[submodule "resources/pytorch-lightning"]
+	path = resources/pytorch-lightning
+	url = https://github.com/PyTorchLightning/pytorch-lightning.git
