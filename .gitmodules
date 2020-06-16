@@ -142,3 +142,21 @@
 [submodule "resources/pytorch-lightning"]
 	path = resources/pytorch-lightning
 	url = https://github.com/PyTorchLightning/pytorch-lightning.git
+[submodule "resources/onnxruntime"]
+	path = resources/onnxruntime
+	url = https://github.com/microsoft/onnxruntime.git
+[submodule "resources/nlp/funNLP"]
+	path = resources/nlp/funNLP
+	url = https://github.com/fighting41love/funNLP.git
+[submodule "resources/DeepMatch"]
+	path = resources/DeepMatch
+	url = https://github.com/shenweichen/DeepMatch.git
+[submodule "resources/Question-Answering-Albert-Electra"]
+	path = resources/Question-Answering-Albert-Electra
+	url = https://github.com/renatoviolin/Question-Answering-Albert-Electra.git
+[submodule "resources/nlp/bert-summarizer"]
+	path = resources/nlp/bert-summarizer
+	url = https://github.com/dmmiller612/bert-extractive-summarizer.git
+[submodule "resources/plaidml"]
+	path = resources/plaidml
+	url = https://github.com/plaidml/plaidml.git
