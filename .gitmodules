@@ -160,3 +160,27 @@
 [submodule "resources/plaidml"]
 	path = resources/plaidml
 	url = https://github.com/plaidml/plaidml.git
+[submodule "resources/nlp/onnxruntime-training-examples"]
+	path = resources/nlp/onnxruntime-training-examples
+	url = https://github.com/microsoft/onnxruntime-training-examples.git
+[submodule "resources/onnx-tutorials"]
+	path = resources/onnx-tutorials
+	url = https://github.com/onnx/tutorials.git
+[submodule "resources/nlp/fast-brert"]
+	path = resources/nlp/fast-brert
+	url = https://github.com/kaushaltrivedi/fast-bert.git
+[submodule "resources/awesome-streamlit"]
+	path = resources/awesome-streamlit
+	url = https://github.com/MarcSkovMadsen/awesome-streamlit.git
+[submodule "resources/fastai-book"]
+	path = resources/fastai-book
+	url = https://github.com/fastai/fastbook.git
+[submodule "resources/nlp/bertsum-chinese"]
+	path = resources/nlp/bertsum-chinese
+	url = https://github.com/425776024/bertsum-chinese.git
+[submodule "resources/nlp/bertsum-chinese-LAI"]
+	path = resources/nlp/bertsum-chinese-LAI
+	url = https://github.com/Machine-Tom/bertsum-chinese-LAI.git
+[submodule "resources/nlp/bertsum"]
+	path = resources/nlp/bertsum
+	url = https://github.com/nlpyang/BertSum.git
