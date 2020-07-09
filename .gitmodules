@@ -94,9 +94,6 @@
 [submodule "resources/DialoGPT"]
 	path = resources/DialoGPT
 	url = https://github.com/microsoft/DialoGPT.git
-[submodule "resources/mlflow"]
-	path = resources/mlflow
-	url = https://github.com/mlflow/mlflow.git
 [submodule "resources/twine"]
 	path = resources/twine
 	url = https://github.com/pypa/twine.git
@@ -157,9 +154,6 @@
 [submodule "resources/nlp/bert-summarizer"]
 	path = resources/nlp/bert-summarizer
 	url = https://github.com/dmmiller612/bert-extractive-summarizer.git
-[submodule "resources/plaidml"]
-	path = resources/plaidml
-	url = https://github.com/plaidml/plaidml.git
 [submodule "resources/nlp/onnxruntime-training-examples"]
 	path = resources/nlp/onnxruntime-training-examples
 	url = https://github.com/microsoft/onnxruntime-training-examples.git
@@ -184,3 +178,6 @@
 [submodule "resources/nlp/bertsum"]
 	path = resources/nlp/bertsum
 	url = https://github.com/nlpyang/BertSum.git
+[submodule "resources/nlp/pegasus"]
+	path = resources/nlp/pegasus
+	url = https://github.com/google-research/pegasus.git
