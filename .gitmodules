@@ -4,18 +4,9 @@
 [submodule "resources/nmt"]
 	path = resources/nlp/nmt
 	url = https://github.com/tensorflow/nmt.git
-[submodule "resources/fastai"]
-	path = resources/fastai
-	url = https://github.com/fastai/fastai.git
 [submodule "resources/fastai-course-v3"]
 	path = resources/nlp/fastai-course-v3
 	url = https://github.com/fastai/course-v3.git
-[submodule "resources/transformers"]
-	path = resources/nlp/transformers
-	url = https://github.com/huggingface/transformers.git
-[submodule "resources/DeepSpeed"]
-	path = resources/nlp/DeepSpeed
-	url = https://github.com/microsoft/DeepSpeed.git
 [submodule "resources/Megatron-LM"]
 	path = resources/nlp/Megatron-LM
 	url = https://github.com/NVIDIA/Megatron-LM.git
@@ -34,9 +25,6 @@
 [submodule "resources/textgenrnn"]
 	path = resources/nlp/textgenrnn
 	url = https://github.com/minimaxir/textgenrnn.git
-[submodule "resources/allennlp"]
-	path = resources/nlp/allennlp
-	url = https://github.com/allenai/allennlp.git
 [submodule "resources/allennlp-example"]
 	path = resources/nlp/allennlp-example
 	url = https://github.com/allenai/allennlp-as-a-library-example.git
@@ -46,12 +34,6 @@
 [submodule "resources/ChatterBot"]
 	path = resources/ChatterBot
 	url = https://github.com/gunthercox/ChatterBot.git
-[submodule "resources/nlp-architect"]
-	path = resources/nlp/nlp-architect
-	url = https://github.com/NervanaSystems/nlp-architect.git
-[submodule "resources/hanlp"]
-	path = resources/nlp/hanlp
-	url = https://github.com/hankcs/HanLP.git
 [submodule "resources/gpt2-ml"]
 	path = resources/nlp/gpt2-ml
 	url = https://github.com/imcaspar/gpt2-ml.git
@@ -100,9 +82,6 @@
 [submodule "resources/nlp/bert4keras"]
 	path = resources/nlp/bert4keras
 	url = https://github.com/bojone/bert4keras.git
-[submodule "resources/trax"]
-	path = resources/trax
-	url = https://github.com/google/trax.git
 [submodule "resources/apex"]
 	path = resources/apex
 	url = https://github.com/NVIDIA/apex.git
@@ -112,9 +91,6 @@
 [submodule "resources/streamlit"]
 	path = resources/streamlit
 	url = https://github.com/streamlit/streamlit.git
-[submodule "resources/ParlAI"]
-	path = resources/ParlAI
-	url = https://github.com/facebookresearch/ParlAI.git
 [submodule "resources/nlp/HarvestText"]
 	path = resources/nlp/HarvestText
 	url = https://github.com/blmoistawinde/HarvestText.git
@@ -136,15 +112,6 @@
 [submodule "resources/TensorRT"]
 	path = resources/TensorRT
 	url = https://github.com/NVIDIA/TensorRT.git
-[submodule "resources/pytorch-lightning"]
-	path = resources/pytorch-lightning
-	url = https://github.com/PyTorchLightning/pytorch-lightning.git
-[submodule "resources/onnxruntime"]
-	path = resources/onnxruntime
-	url = https://github.com/microsoft/onnxruntime.git
-[submodule "resources/nlp/funNLP"]
-	path = resources/nlp/funNLP
-	url = https://github.com/fighting41love/funNLP.git
 [submodule "resources/DeepMatch"]
 	path = resources/DeepMatch
 	url = https://github.com/shenweichen/DeepMatch.git
@@ -181,3 +148,24 @@
 [submodule "resources/nlp/pegasus"]
 	path = resources/nlp/pegasus
 	url = https://github.com/google-research/pegasus.git
+[submodule "resources/corejava"]
+	path = resources/corejava
+	url = https://github.com/yizutianya/corejava.git
+[submodule "resources/PRML"]
+	path = resources/PRML
+	url = https://github.com/ctgk/PRML.git
+[submodule "resources/open-ai-tasks"]
+	path = resources/open-ai-tasks
+	url = https://github.com/StevenLei2017/AI_projects.git
+[submodule "resources/google-translate-api"]
+	path = resources/google-translate-api
+	url = https://github.com/matheuss/google-translate-api.git
+[submodule "resources/translate-shell"]
+	path = resources/translate-shell
+	url = https://github.com/soimort/translate-shell.git
+[submodule "resources/translate-python"]
+	path = resources/translate-python
+	url = https://github.com/terryyin/translate-python.git
+[submodule "resources/python-algorithms"]
+	path = resources/python-algorithms
+	url = https://gitee.com/aimo-ailearn/python-algorithms.git
