@@ -169,3 +169,12 @@
 [submodule "resources/python-algorithms"]
 	path = resources/python-algorithms
 	url = https://gitee.com/aimo-ailearn/python-algorithms.git
+[submodule "resources/java-algorithms"]
+	path = resources/java-algorithms
+	url = https://gitee.com/aimo-ailearn/java-algorithms.git
+[submodule "resources/fastai-course-nlp"]
+	path = resources/fastai-course-nlp
+	url = https://github.com/fastai/course-nlp.git
+[submodule "resources/numpy-ml"]
+	path = resources/numpy-ml
+	url = https://github.com/ddbourgin/numpy-ml.git
