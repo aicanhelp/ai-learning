@@ -178,3 +178,6 @@
 [submodule "resources/numpy-ml"]
 	path = resources/numpy-ml
 	url = https://github.com/ddbourgin/numpy-ml.git
+[submodule "resources/competition/baseline"]
+	path = resources/competition/baseline
+	url = https://gitee.com/aimo-ailearn/competition-baseline.git
