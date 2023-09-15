@@ -181,3 +181,12 @@
 [submodule "resources/competition/baseline"]
 	path = resources/competition/baseline
 	url = https://gitee.com/aimo-ailearn/competition-baseline.git
+[submodule "resources/learn-opengl"]
+	path = resources/learn-opengl
+	url = https://github.com/JoeyDeVries/LearnOpenGL.git
+[submodule "resources/triton-tutorial"]
+	path = resources/triton-tutorial
+	url = https://github.com/triton-inference-server/tutorials.git
+[submodule "resources/jetson-infer"]
+	path = resources/jetson-infer
+	url = https://github.com/dusty-nv/jetson-inference.git
