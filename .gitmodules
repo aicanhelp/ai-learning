@@ -190,3 +190,6 @@
 [submodule "resources/jetson-infer"]
 	path = resources/jetson-infer
 	url = https://github.com/dusty-nv/jetson-inference.git
+[submodule "resources/llm-action"]
+	path = resources/llm-action
+	url = https://github.com/liguodongiot/llm-action.git
