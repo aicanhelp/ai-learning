@@ -193,3 +193,6 @@
 [submodule "resources/llm-action"]
 	path = resources/llm-action
 	url = https://github.com/liguodongiot/llm-action.git
+[submodule "resources/huggingface-blog"]
+	path = resources/huggingface-blog
+	url = https://github.com/huggingface/blog.git
