@@ -196,3 +196,6 @@
 [submodule "resources/huggingface-blog"]
 	path = resources/huggingface-blog
 	url = https://github.com/huggingface/blog.git
+[submodule "resources/pytorch-tutorials"]
+	path = resources/pytorch-tutorials
+	url = https://github.com/pytorch/tutorials.git
